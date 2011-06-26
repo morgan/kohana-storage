@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>RSS Server Sample</title>
+</head>
+<body>
+<h1>RSS Server PHP Sample</h1>
+<h2>Overview</h2>
+<p>This sample implements a simple RSS server that advertises the contents of a listable tag as a RSS channel.  The RSS channels implement the Yahoo media extensions so the channels are compatible with media-enabled readers such as Miro.</p>
+<p>In order to show thumbnails for the channel items, the code will look for an attribute named REF_Thumbnail that contains the ObjectID of the object's thumbnail.  Also, if the attribute "Filename" exists in the user metadata, it will be used as the filename for the channel item.  If you load content using the Hana browser application (the 'cosbrowser' sample and its associated processing server), your objects will be set up this way.</p>
+<p>An additional file, MediaStreamer.php streams objects and their thumbnails over http.  This is required to provide access to these objects in a "Linkable URL" (the REST api requires HTTP headers to be set and thus a URL cannot be generated for objects' contents).</p>
+<h2>Installation</h2>
+<p>To install this sample, you will first need a PHP-enabled web server.  The easiest way to do this is to download a pre-packaged solution such as <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> that combines Apache and PHP.</p>
+<p>Next, create a directory for the program (e.g. <code>C:\xampp\htdocs\rss</code>).  Copy the sample files into the new directory along with the .php files from the PHP wrapper (<code>CosHelpers.php, CosInterface.php, CosObjects.php, CosRestApi.php</code>).  Finally, edit <code>RssSettings.php</code> and enter the hostname of your COS server, your UID, and your shared secret.</p>
+<p>Finally, start your web server and open a browser.  Point to your sample application directory and use the CosRss.php page to generate the channel.  You must pass the name of a listable tag in the "tag" parameter, e.g. <a href="http://localhost/rss/CosRss.php?tag=listable">http://localhost/rss/CosRss.php?tag=listable</a></p>
+<p>A good RSS reader to view video channels with is Miro: <a href="http://www.getmiro.com/">http://www.getmiro.com/</a></p>
+<h2>Security</h2>
+<p>Theoretically, this sample will provide read access to any object the UID used can access.  It is not suitable for production use!</p>
+<h2>Source Code</h2>
+<ul>
+<li><b>CosRss.php</b>- This file generates the RSS channel and its items.</li>
+<li><b>MediaStreamer.php</b>- This file takes COS Object IDs and streams their contents out over HTTP.</li>
+<li><b>MimeType.php</b>- This file takes an object's metadata and attempts to determine its mimetype.  If the MimeType user metadata attribute is set, that value is used.  Otherwise, if the Filename is set it will attempt to match the filename extension.   If neither of the above are set, it uses 'application/octet-stream'.</li>
+<li><b>RssSettings.php</b>- This file contains the location of the COS server and the application's login information.</li>
+</ul>
+</body>
+</html>

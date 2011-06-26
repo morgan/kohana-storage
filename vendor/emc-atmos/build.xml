@@ -1,0 +1,9 @@
+<project name="php" default="zip">
+	<!-- This project is simply used to build the output zip files -->
+	<target name="zip">
+		<zip destfile="EsuPHP.zip">
+			<zipfileset dir=".">
+			</zipfileset>
+		</zip>
+	</target>
+</project>
