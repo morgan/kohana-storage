@@ -19,6 +19,22 @@ abstract class Kohana_StorageTest extends Unittest_TestCase
     abstract public function factory();
     
 	/**
+	 * Check whether or not to skip test
+	 * 
+	 * @access	protected
+	 * @return	void
+	 */
+	public function setUp()
+    {
+    	parent::setUp();
+
+        if ( ! Kohana::$config->load('storage.unittest.enabled'))
+        {
+            $this->markTestSkipped('Storage unit test not enabled.');
+        }
+    }  
+    
+	/**
 	 * Tests object deletion
 	 * 
 	 * @covers	Storage::factory
@@ -171,7 +187,7 @@ abstract class Kohana_StorageTest extends Unittest_TestCase
 	 */
 	public function test_samples()
 	{
-		$directory = Kohana::config('storage.unittest.samples');
+		$directory = Kohana::$config->load('storage.unittest.samples');
 		
 		if (is_dir($directory))
 		{

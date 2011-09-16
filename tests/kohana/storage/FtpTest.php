@@ -20,7 +20,7 @@ class Kohana_Storage_FtpTest extends Kohana_StorageTest
     {
     	parent::setUp();
     	
-    	$config = Kohana::config('storage.ftp');
+    	$config = Kohana::$config->load('storage.ftp');
     	
         if ( ! $this->hasInternet() || ! $config['host'] || ! $config['username'] || ! $config['password'])
         {

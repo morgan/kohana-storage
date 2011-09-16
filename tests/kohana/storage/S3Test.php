@@ -20,7 +20,7 @@ class Kohana_Storage_S3Test extends Kohana_StorageTest
     {
     	parent::setUp();
     	
-    	$config = Kohana::config('storage.s3');
+    	$config = Kohana::$config->load('storage.s3');
     	
         if ( ! $this->hasInternet() || ! $config['key'] || ! $config['secret_key'] || ! $config['bucket'])
         {

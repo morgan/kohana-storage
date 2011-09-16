@@ -20,7 +20,7 @@ class Kohana_Storage_LocalTest extends Kohana_StorageTest
     {
     	parent::setUp();
 
-    	$config = Kohana::config('storage.local');
+    	$config = Kohana::$config->load('storage.local');
     	
         if ( ! $config['root_path'] || ! $config['url'])
         {

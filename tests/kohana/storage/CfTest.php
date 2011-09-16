@@ -20,7 +20,7 @@ class Kohana_Storage_CfTest extends Kohana_StorageTest
     {
     	parent::setUp();
 
-    	$config = Kohana::config('storage.cf');
+    	$config = Kohana::$config->load('storage.cf');
     	
         if ( ! $this->hasInternet() || ! $config['username'] || ! $config['api_key'])
         {

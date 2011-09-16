@@ -155,6 +155,6 @@
 	// specify path to a directory of sample files and each one will be tested across all enabled
 	// drivers. Disable by setting FALSE. Goal is to test 2 GB files on each driver before 
 	// releasing future versions.
-	$config['unittest']['samples']	= FALSE;
+	$config['unittest']['samples']	= TRUE;
 	
 return $config;

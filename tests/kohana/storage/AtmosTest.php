@@ -20,7 +20,7 @@ class Kohana_Storage_AtmosTest extends Kohana_StorageTest
     {
     	parent::setUp();
 
-    	$config = Kohana::config('storage.atmos');
+    	$config = Kohana::$config->load('storage.atmos');
     	
         if ( ! $this->hasInternet() || ! $config['host'] || ! $config['uid'] || ! $config['subtenant_id'] || ! $config['secret'])
         {

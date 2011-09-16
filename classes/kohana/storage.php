@@ -33,7 +33,7 @@ abstract class Kohana_Storage
 	{
 		$connection = $connection ? strtolower($connection) : self::$driver;
 
-		$config = $config + Kohana::config('storage.' . $connection);
+		$config = $config + Kohana::$config->load('storage.' . $connection);
 
 		$class = 'Storage_' . ucfirst(isset($config['driver']) ? $config['driver'] : $connection);
 		
