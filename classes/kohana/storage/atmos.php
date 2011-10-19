@@ -73,15 +73,20 @@ class Kohana_Storage_Atmos extends Storage
 	 * @access	protected
 	 * @param	string
 	 * @param	resource
+	 * @param	string
 	 * @return	void
 	 */
-	protected function _set($path, $handle)
+	protected function _set($path, $handle, $mime)
 	{
 		try
 		{
-			if ($this->_get_upload_helper()->createObjectFromStreamOnPath($path, $handle) === NULL)
+			$helper = $this->_get_upload_helper();
+			
+			$helper->setMimeType($mime);
+			
+			if ($helper->createObjectFromStreamOnPath($path, $handle) === NULL)
 			{
-				$this->_get_upload_helper()->updateObjectFromStream($path, $handle);	
+				$helper->updateObjectFromStream($path, $handle);	
 			}
 			
 			return TRUE;

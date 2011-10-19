@@ -11,7 +11,7 @@
  * @license		MIT
  */
 abstract class Kohana_Storage 
-{	
+{
 	/**
 	 * Default driver
 	 * 
@@ -67,6 +67,25 @@ abstract class Kohana_Storage
 		$segments[]	= $hash . ((isset($path['extension'])) ? '.' . $path['extension'] : '');
 		
 		return implode('/', $segments);
+	}	
+	
+	/**
+	 * Wrapper for File::mime_by_ext
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	resource
+	 * @param	string	Default mime if unable to derive
+	 * @return	string
+	 */
+	public static function mime($path, $default = 'application/octet-stream')
+	{
+		$extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+		
+		if ($mime = File::mime_by_ext($extension))
+			return $mime;
+				
+		return $default;
 	}
 	
 	/**
@@ -94,9 +113,10 @@ abstract class Kohana_Storage
 	 * @access	protected
 	 * @param	string
 	 * @param	resource
+	 * @param	string
 	 * @return	void
 	 */
-	abstract protected function _set($path, $handle);	
+	abstract protected function _set($path, $handle, $mime);	
 	
 	/**
 	 * Read contents of file.
@@ -176,7 +196,7 @@ abstract class Kohana_Storage
 			$handle = $content;
 		}
 		
-		$this->_set($this->_filter_path($path), $handle);
+		$this->_set($this->_filter_path($path), $handle, Storage::mime($path));
 		
 		if (is_resource($handle))
 		{
@@ -259,7 +279,7 @@ abstract class Kohana_Storage
 	public function url($path, $protocol = 'http')
 	{
 		return $this->_url($this->_filter_path($path), $protocol);
-	}	
+	}
 	
 	/**
 	 * Filter path

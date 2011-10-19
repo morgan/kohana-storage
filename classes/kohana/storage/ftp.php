@@ -93,9 +93,10 @@ class Kohana_Storage_Ftp extends Storage
 	 * @access	protected
 	 * @param	string
 	 * @param	resource
+	 * @param	string
 	 * @return	void
 	 */
-	protected function _set($path, $handle)
+	protected function _set($path, $handle, $mime)
 	{
 		$this->_load();
 

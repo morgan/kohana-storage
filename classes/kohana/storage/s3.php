@@ -69,15 +69,16 @@ class Kohana_Storage_S3 extends Storage
 	 * @access	protected
 	 * @param	string
 	 * @param	resource
+	 * @param	string
 	 * @return	void
 	 */
-	protected function _set($path, $handle)
+	protected function _set($path, $handle, $mime)
 	{
 		$this->_load();
 		
 		$acl = $this->_config['public'] ? AmazonS3::ACL_PUBLIC : AmazonS3::ACL_PRIVATE;
 		
-		$this->_driver->create_object($this->_config['bucket'], $path, array('fileUpload' => $handle, 'acl' => $acl));
+		$this->_driver->create_object($this->_config['bucket'], $path, array('fileUpload' => $handle, 'acl' => $acl, 'contentType' => $mime));
 	}
 
 	/**

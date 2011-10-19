@@ -74,6 +74,7 @@ abstract class Kohana_StorageTest extends Unittest_TestCase
 	 * @covers	Storage::factory
 	 * @covers	Storage::set
 	 * @covers	Storage::url
+	 * @covers	Storage::mime
 	 * @covers	Storage::delete
 	 * @access	public
 	 * @return	void
@@ -91,9 +92,18 @@ abstract class Kohana_StorageTest extends Unittest_TestCase
 		
 		// Create file
 		$storage->set($path, $content);
-
+		
+		// Use Request to get content and headers
+		$response = Request::factory($storage->url($path))->execute();
+		
 		// Verify random content matches remote file
-		$this->assertEquals($content, file_get_contents($storage->url($path)));
+		$this->assertEquals($content, $response->body());		
+
+		// Parse mime from Content-Type header
+		$type = current(explode(';', $response->headers('Content-Type')));
+		
+		// Verify path mime matches Response
+		$this->assertEquals(Storage::mime($path), $type);		
 		
 		// Cleanup test file
 		$storage->delete($path);
@@ -178,7 +188,7 @@ abstract class Kohana_StorageTest extends Unittest_TestCase
 		// Cleanup test file
 		$storage->delete($path);		
 	}
-	
+
 	/**
 	 * Test Storage::set and Storage::get on sample files.
 	 * 

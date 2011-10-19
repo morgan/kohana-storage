@@ -25,13 +25,13 @@ class Kohana_Storage_Local extends Storage
 	/**
 	 * Set
 	 * 
-	 * @todo	Write in chunks
 	 * @access	protected
 	 * @param	string
 	 * @param	resource
+	 * @param	string
 	 * @return	void
 	 */
-	protected function _set($path, $handle)
+	protected function _set($path, $handle, $mime)
 	{
 		$this->_create_directory($path);		
 		
