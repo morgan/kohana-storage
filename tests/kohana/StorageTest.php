@@ -2,6 +2,7 @@
 /**
  * Tests Storage Module
  *
+ * @group		storage
  * @package		Storage
  * @category	Tests
  * @author		Micheal Morgan <micheal@morgan.ly>
