@@ -57,7 +57,7 @@ class Kohana_Storage_S3 extends Storage
 		{
 			require_once Kohana::find_file('vendor', 'aws-sdk/sdk.class');				
 				
-			$this->_driver = new AmazonS3($this->_config['key'], $this->_config['secret_key']);
+			$this->_driver = new AmazonS3(array('key' => $this->_config['key'], 'secret' => $this->_config['secret_key']));
 		}
 		
 		return $this->_driver;
