@@ -21,12 +21,13 @@ class Storage_Connection_S3 extends Storage_Connection
 	 */
 	protected $_config = array
 	(
-		'key'			=> NULL,
-		'secret_key'	=> NULL,
-		'bucket'		=> NULL,
-		'cname'			=> NULL,
-		'public'		=> FALSE,		
-		'preauth'		=> 30
+		'key'		=> NULL,
+		'secret'	=> NULL,
+		'bucket'	=> NULL,
+		'cname'		=> NULL,
+		'public'	=> FALSE,		
+		'preauth'	=> 30,
+		'certificate_authority' => FALSE
 	);
 	
 	/**
@@ -56,8 +57,9 @@ class Storage_Connection_S3 extends Storage_Connection
 		if ($this->_driver === NULL)
 		{
 			require_once Kohana::find_file('vendor', 'aws-sdk/sdk.class');				
-				
-			$this->_driver = new AmazonS3($this->_config['key'], $this->_config['secret_key']);
+
+			$this->_driver = new AmazonS3(Arr::extract($this->_config, 
+				array('key', 'secret', 'certificate_authority')));
 		}
 		
 		return $this->_driver;

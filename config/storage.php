@@ -5,7 +5,7 @@
  * @package		Storage
  * @category	Base
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011 Micheal Morgan
+ * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
 
@@ -18,26 +18,34 @@
 	 */
 
 	// REQUIRED - AWS Keys - Under access credentials in AWS Portal
-	$config['s3']['key'] 		= NULL;
-	$config['s3']['secret_key'] = NULL;
+	$config['s3']['key'] 					= NULL;
+	$config['s3']['secret'] 				= NULL;
 	
 	// REQUIRED - Bucket to work with - this can be created under AWS Portal
-	$config['s3']['bucket'] 	= NULL;
+	$config['s3']['bucket'] 				= NULL;
 	
 	// OPTIONAL - Prefix path with additional pathing - be sure to include trailing slash "/"
 	// If left empty, media will be written to root.
-	$config['s3']['directory']	= NULL;
+	$config['s3']['directory']				= NULL;
 	
 	// OPTIONAL - Override default URL with CNAME. This must be configured prior to use of this 
 	// library. As of current with S3, CNAME only works with public objects. Include trailing
 	// slash without the protocol such as "example.com/"
-	$config['s3']['cname']		= NULL;
+	$config['s3']['cname']					= NULL;
 	
 	// OPTIONAL - Create and generate URL's as public. If set to FALSE, will preauth URL's.
-	$config['s3']['public']		= FALSE;
+	$config['s3']['public']					= FALSE;
 	
 	// OPTIONAL - Number of seconds file is authorized to be downloaded
-	$config['s3']['preauth']	= 30;
+	$config['s3']['preauth']				= 30;
+
+	// OPTIONAL - Determines which Cerificate Authority file to use. A value of boolean `false` 
+	// will use the Certificate Authority file available on the system. A value of boolean 
+	// `true` will use the Certificate Authority provided by the SDK. Passing a file system path to 
+	// a Certificate Authority file (chmodded to `0755`) will use that. Leave this set 
+	// to `false` if you're not sure.
+	// @link https://github.com/amazonwebservices/aws-sdk-for-php/blob/2a67bf8302f00141eca8b39f5f381dcfbb0d10e6/sdk.class.php#L374
+	$config['s3']['certificate_authority']	= FALSE;
 
 	/**
 	 * EMC Atmos

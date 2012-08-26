@@ -23,7 +23,7 @@ class Kohana_Storage_Connection_S3Test extends Kohana_Storage_ConnectionTest
     	
     	$config = Kohana::$config->load('storage.s3');
     	
-        if ( ! $this->hasInternet() || ! $config['key'] || ! $config['secret_key'] || ! $config['bucket'])
+        if ( ! $this->hasInternet() || ! $config['key'] || ! $config['secret'] || ! $config['bucket'])
         {
             $this->markTestSkipped('Storage S3 driver is not configured.');
         }
