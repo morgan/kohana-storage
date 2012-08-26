@@ -239,13 +239,13 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 		$this->assertInstanceOf('Storage_Directory', $listing, 'Expecting directory listing for path.');
 		
 		// Attempt to retrieve directory from listing
-		//$this->assertInstanceOf('Storage_Directory', $listing->get($segment_2), 'Expecting new directory to exist within listing.');
+		$this->assertInstanceOf('Storage_Directory', $listing->get($segment_2), 'Expecting new directory to exist within listing.');
 		
 		// Test directory parent
 		$this->assertEquals($this->_directory, $listing->parent()->name(), 'Directory parent does not match.');
 		
 		// Attempt to retrieve file from listing
-		//$this->assertInstanceOf('Storage_File', $listing->get($segment_2)->get($file), 'Expecting new file to exist within listing.');		
+		$this->assertInstanceOf('Storage_File', $listing->get($segment_2)->get($file), 'Expecting new file to exist within listing.');		
 		
 		// Cleanup test file
 		$this->assertEquals(TRUE, $connection->delete($path . $file), 'Verify file has been deleted.');	

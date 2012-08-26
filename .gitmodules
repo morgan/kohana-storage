@@ -3,4 +3,4 @@
 	url = git://github.com/amazonwebservices/aws-sdk-for-php.git
 [submodule "vendor/rs-cf"]
 	path = vendor/rs-cf
-	url = git://github.com/rackspace/php-cloudfiles.git
+	url = git@github.com:morgan/php-cloudfiles.git

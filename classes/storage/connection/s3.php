@@ -5,7 +5,7 @@
  * @package		Storage
  * @category	Base
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011 Micheal Morgan
+ * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
 class Storage_Connection_S3 extends Storage_Connection
@@ -80,7 +80,8 @@ class Storage_Connection_S3 extends Storage_Connection
 		
 		$acl = $this->_config['public'] ? AmazonS3::ACL_PUBLIC : AmazonS3::ACL_PRIVATE;
 		
-		$this->_driver->create_object($this->_config['bucket'], $path, array('fileUpload' => $handle, 'acl' => $acl, 'contentType' => $mime));
+		$this->_driver->create_object($this->_config['bucket'], $path, 
+			array('fileUpload' => $handle, 'acl' => $acl, 'contentType' => $mime));
 	}
 
 	/**
@@ -95,7 +96,8 @@ class Storage_Connection_S3 extends Storage_Connection
 	{
 		$this->_load();
 		
-		$this->_driver->get_object($this->_config['bucket'], $path, array('fileDownload' => $handle));
+		$this->_driver->get_object($this->_config['bucket'], $path, 
+			array('fileDownload' => $handle));
 		
 		return TRUE;
 	}	
@@ -158,7 +160,8 @@ class Storage_Connection_S3 extends Storage_Connection
 		{
 			$this->_load();
 			
-			return $this->_driver->get_object($this->_config['bucket'], $path, array('preauth' => time() + $this->_config['preauth']));
+			return $this->_driver->get_object($this->_config['bucket'], $path, 
+				array('preauth' => time() + $this->_config['preauth']));
 		}
 		else
 			return $protocol . '://' . $this->_get_url() . $path;
@@ -216,6 +219,8 @@ class Storage_Connection_S3 extends Storage_Connection
 	 */
 	protected function _get_url()
 	{
-		return ($this->_config['cname']) ? $this->_config['cname'] : $this->_config['bucket'] . $this->_url;
+		return ($this->_config['cname']) 
+			? $this->_config['cname'] 
+			: $this->_config['bucket'] . $this->_url;
 	}
 }
