@@ -1,3 +1,14 @@
+# 0.4.0
+
+- Added directory listing support
+- Renamed `Storage` to `Storage_Connection`
+- `Storage` now helpers for working with default connection
+- Added `Storage_File` for performing actions on single path
+- Updated AWS SDK to 1.5.13
+- Updated EMC Atmos SDK to 1.4.1.21
+- Updated Rackspace Cloud Files SDK to latest
+- All tests pass: OK (34 tests, 69 assertions)
+
 # 0.3.0 - 10/18/2011
 
 - Added mime support for Amazon S3, EMC Atmos and Rackspace Cloud Files
