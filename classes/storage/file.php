@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Rackspace Cloud Files driver for Storage Module
+ * Storage File
  * 
  * @package		Storage
  * @category	Base
@@ -8,4 +8,4 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Storage_Cf extends Kohana_Storage_Cf {}
+class Storage_File extends Kohana_Storage_File {}

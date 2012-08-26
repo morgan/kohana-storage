@@ -8,10 +8,13 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_Local extends Storage
+class Storage_Connection_Local extends Storage_Connection
 {	
 	/**
 	 * Default config
+	 * 
+	 * "root_path" is a pre-existing directory. Any additional pathing will be created if it does 
+	 * not exist.
 	 * 
 	 * @access	protected
 	 * @var		array
@@ -36,7 +39,7 @@ class Kohana_Storage_Local extends Storage
 		$this->_create_directory($path);		
 		
 		$path = $this->_config['root_path'] . $path;
-		
+
 		if ($target = fopen($path, 'w+'))
 		{
 			stream_copy_to_stream($handle, $target);
@@ -116,6 +119,45 @@ class Kohana_Storage_Local extends Storage
 	}
 	
 	/**
+	 * Get listing
+	 * 
+	 * @access	protected
+	 * @param	string	Path of file 
+	 * @return	mixed
+	 */
+	protected function _listing($path, $listing)
+	{
+		$directory = new DirectoryIterator($this->_config['root_path'] . $path);
+		
+		$path = $listing->path();
+		
+		foreach ($directory as $item)
+		{
+			$name = $item->getFilename();
+
+			if ($name[0] === '.' OR $name[strlen($name) - 1] === '~')
+				continue;
+
+			$_path = $path . Storage::DELIMITER . $name;	
+				
+			if ($item->isFile())
+			{
+				$object = Storage_File::factory($_path, $this)
+					->size($item->getSize())
+					->modified($item->getMTime());
+			}
+			else if ($item->isDir())
+			{
+				$object = Storage_Directory::factory($_path, $this);
+			}
+			
+			$listing->set($object);
+		}
+		
+		return $listing;
+	}	
+	
+	/**
 	 * Create directory based on current location
 	 * 
 	 * @access	protected
@@ -129,7 +171,7 @@ class Kohana_Storage_Local extends Storage
 		$segments = explode('/', $path);		
 		
 		$path = $this->_config['root_path'];
-		
+
 		foreach ($segments as $segment)
 		{
 			// Skip files

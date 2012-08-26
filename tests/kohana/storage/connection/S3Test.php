@@ -9,10 +9,10 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_FtpTest extends Kohana_StorageTest
+class Kohana_Storage_Connection_S3Test extends Kohana_Storage_ConnectionTest
 {	
 	/**
-	 * Verify internet and FTP has required configuration
+	 * Verify internet and S3 has required configuration
 	 * 
 	 * @access	protected
 	 * @return	void
@@ -21,22 +21,22 @@ class Kohana_Storage_FtpTest extends Kohana_StorageTest
     {
     	parent::setUp();
     	
-    	$config = Kohana::$config->load('storage.ftp');
+    	$config = Kohana::$config->load('storage.s3');
     	
-        if ( ! $this->hasInternet() || ! $config['host'] || ! $config['username'] || ! $config['password'])
+        if ( ! $this->hasInternet() || ! $config['key'] || ! $config['secret_key'] || ! $config['bucket'])
         {
-            $this->markTestSkipped('Storage FTP driver is not configured.');
+            $this->markTestSkipped('Storage S3 driver is not configured.');
         }
     }
     
     /**
-     * Factory using FTP configuration
+     * Factory using S3 configuration
      * 
      * @access	public
-     * @return	Storage_Ftp
+     * @return	Storage_S3
      */
     public function factory()
     {
-    	return Storage::factory('ftp');
+    	return Storage_Connection::factory('s3');
     }
 }

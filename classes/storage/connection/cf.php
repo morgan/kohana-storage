@@ -13,7 +13,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_Cf extends Storage
+class Storage_Connection_Cf extends Storage_Connection
 {	
 	/**
 	 * Default config
@@ -135,8 +135,6 @@ class Kohana_Storage_Cf extends Storage
 			}
 			catch (Exception $e)
 			{
-				echo 'exception';exit;
-				
 				return FALSE;
 			}
 		}
@@ -195,6 +193,42 @@ class Kohana_Storage_Cf extends Storage
 		}
 		
 		return NULL;
+	}	
+	
+	/**
+	 * Get listing
+	 * 
+	 * @access	protected
+	 * @param	string	Path of file 
+	 * @return	mixed
+	 */
+	protected function _listing($path, $listing)
+	{
+		$this->_load();
+
+		$marker = ($path) ? $path . Storage::DELIMITER : NULL;
+		
+		foreach ($this->_container->get_objects(0, $marker, $marker, NULL, Storage::DELIMITER) as $item)
+		{
+			if ($item instanceof CF_Object)
+			{
+				$name = end(explode(Storage::DELIMITER, $item->name));
+			
+				$object = Storage_File::factory($path . Storage::DELIMITER . $name, $this)
+					->size($item->content_length)
+					->modified(strtotime($item->last_modified));
+					
+				$listing->set($object);
+			}
+			else if (isset($item['subdir']))
+			{
+				$_path = $path . Storage::DELIMITER . end(explode(Storage::DELIMITER, trim($item['subdir'], Storage::DELIMITER)));
+				
+				$listing->set(Storage_Directory::factory($_path, $this));
+			}
+		}
+		
+		return $listing;
 	}	
 	
 	/**

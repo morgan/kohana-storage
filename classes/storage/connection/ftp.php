@@ -8,7 +8,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_Ftp extends Storage
+class Storage_Connection_Ftp extends Storage_Connection
 {	
 	/**
 	 * Default config
@@ -43,7 +43,7 @@ class Kohana_Storage_Ftp extends Storage
 	 * @access	protected
 	 * @var		string
 	 */
-	protected $_origin = '/';
+	protected $_origin = Storage::DELIMITER;
 	
 	/**
 	 * Load connection
@@ -57,10 +57,14 @@ class Kohana_Storage_Ftp extends Storage
 		{
 			$call = $this->_config['ssl'] ? 'ftp_connect' : 'ftp_ssl_connect';
 			
-			$this->_connection = $call($this->_config['host'], $this->_config['port'], $this->_config['timeout']);
-			
-			if ( ! ftp_login($this->_connection, $this->_config['username'], $this->_config['password']))
-				throw new Kohana_Exception('Storage FTP driver failed to authenticate.');
+			if ( ! $this->_connection = $call($this->_config['host'], $this->_config['port'], $this->_config['timeout']))
+				throw new Storage_Exception('Storage_Connection_FTP unable to establish connection.');
+
+			if ($this->_config['username'] !== NULL && $this->_config['password'] !== NULL)
+			{
+				if ( ! ftp_login($this->_connection, $this->_config['username'], $this->_config['password']))
+					throw new Kohana_Exception('Storage FTP driver failed to authenticate.');
+			}
 				
 			if ($this->_config['passive'])
 			{
@@ -187,6 +191,54 @@ class Kohana_Storage_Ftp extends Storage
 	}
 	
 	/**
+	 * Get listing
+	 * 
+	 * @access	protected
+	 * @param	string	Path of file 
+	 * @return	mixed
+	 */
+	protected function _listing($path, $listing)
+	{
+		$this->_load();
+
+		ftp_chdir($this->_connection, $path);
+
+		foreach (ftp_nlist($this->_connection, NULL) as $name)
+		{
+			if ($name[0] === '.' OR $name[strlen($name) - 1] === '~')
+				continue;
+				
+			$item = ftp_raw($this->_connection, 'MLST ' . $name);	
+			$item = explode(';', $item[1]);
+			
+			$name = trim($item[7]);
+
+			$_path = $path . Storage::DELIMITER . $name;
+			
+			$type = end(explode('=', $item[0]));
+			
+			if ($type == 'dir')
+			{
+				$object = Storage_Directory::factory($_path, $this);
+			}
+			else if ($type == 'file')
+			{
+				$object = Storage_File::factory($_path, $this)
+					->size(end(explode('=', $item[1])))
+					->modified(strtotime(end(explode('=', $item[2]))));
+			}
+			else
+				throw new Storage_Exception('Unkown type: ' . $type);
+				
+			$listing->set($object);
+		}
+
+		ftp_chdir($this->_connection, $this->_origin);
+		
+		return $listing;
+	}	
+	
+	/**
 	 * Create directory based on current location
 	 * 
 	 * @access	protected
@@ -197,7 +249,7 @@ class Kohana_Storage_Ftp extends Storage
 	{
 		$result = TRUE;
 
-		$segments = explode('/', $path);		
+		$segments = explode(Storage::DELIMITER, $path);		
 		
 		$path = '';
 		
@@ -207,12 +259,12 @@ class Kohana_Storage_Ftp extends Storage
 			if (strpos($segment, '.'))
 				break;
 			
-			$path .= '/' . $segment;
+			$path .= Storage::DELIMITER . $segment;
 
 			// Create directory in relation to root if unable to change directory.
 			if ( ! @ftp_chdir($this->_connection, $path))
 			{
-				ftp_chdir($this->_connection, '/');
+				ftp_chdir($this->_connection, Storage::DELIMITER);
 	
 				if ( ! ftp_mkdir($this->_connection, $path))
 				{

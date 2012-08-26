@@ -9,10 +9,10 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_S3Test extends Kohana_StorageTest
+class Kohana_Storage_Connection_CfTest extends Kohana_Storage_ConnectionTest
 {	
 	/**
-	 * Verify internet and S3 has required configuration
+	 * Verify internet and Cloud Files has required configuration
 	 * 
 	 * @access	protected
 	 * @return	void
@@ -20,23 +20,23 @@ class Kohana_Storage_S3Test extends Kohana_StorageTest
 	public function setUp()
     {
     	parent::setUp();
+
+    	$config = Kohana::$config->load('storage.cf');
     	
-    	$config = Kohana::$config->load('storage.s3');
-    	
-        if ( ! $this->hasInternet() || ! $config['key'] || ! $config['secret_key'] || ! $config['bucket'])
+        if ( ! $this->hasInternet() || ! $config['username'] || ! $config['api_key'])
         {
-            $this->markTestSkipped('Storage S3 driver is not configured.');
+            $this->markTestSkipped('Storage Cloud Files driver is not configured.');
         }
     }
     
     /**
-     * Factory using S3 configuration
+     * Factory using Cloud Files configuration
      * 
      * @access	public
-     * @return	Storage_S3
+     * @return	Storage_Cf
      */
     public function factory()
     {
-    	return Storage::factory('s3');
+    	return Storage_Connection::factory('cf', array('public' => TRUE));
     }
 }

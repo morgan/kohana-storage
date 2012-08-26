@@ -2,7 +2,7 @@
 /**
  * Storage Module
  * 
- * Supports PHP 5.2.3 or greater.
+ * Supports PHP 5.3 or greater.
  * 
  * @package		Storage
  * @category	Base
@@ -10,7 +10,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-abstract class Kohana_Storage 
+abstract class Storage_Connection 
 {
 	/**
 	 * Default driver
@@ -35,58 +35,10 @@ abstract class Kohana_Storage
 
 		$config = $config + Kohana::$config->load('storage.' . $connection);
 
-		$class = 'Storage_' . ucfirst(isset($config['driver']) ? $config['driver'] : $connection);
+		$class = 'Storage_Connection_' . ucfirst(isset($config['driver']) ? $config['driver'] : $connection);
 		
 		return new $class($config);
-	}
-
-	/**
-	 * Convert path to hash structure while preserving directory and extension.
-	 * 
-	 * @static
-	 * @access	public
-	 * @param	string
-	 * @param	bool
-	 * @return	string
-	 */
-	public static function hash($path, $random = FALSE)
-	{
-		$hash = ($random) ? md5(time() + rand()) : md5($path);
-		
-		$path = pathinfo($path);
-
-		$segments = array();
-		
-		if ($path['dirname'] != '.')
-		{
-			$segments[] = $path['dirname'];
-		}
-	
-		$segments[] = substr($hash, 0, 2);
-		$segments[] = substr($hash, 2, 2);
-		$segments[]	= $hash . ((isset($path['extension'])) ? '.' . $path['extension'] : '');
-		
-		return implode('/', $segments);
 	}	
-	
-	/**
-	 * Wrapper for File::mime_by_ext
-	 * 
-	 * @static
-	 * @access	public
-	 * @param	resource
-	 * @param	string	Default mime if unable to derive
-	 * @return	string
-	 */
-	public static function mime($path, $default = 'application/octet-stream')
-	{
-		$extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-		
-		if ($mime = File::mime_by_ext($extension))
-			return $mime;
-				
-		return $default;
-	}
 	
 	/**
 	 * Config
@@ -104,7 +56,7 @@ abstract class Kohana_Storage
 	 */
 	public function __construct(array $config = array())
 	{
-		$this->_config = $config + $this->_config + array('directory' => NULL);
+		$this->_config = Arr::merge(array('directory' => NULL), $this->_config, $config);
 	}
 	
 	/**
@@ -121,7 +73,7 @@ abstract class Kohana_Storage
 	/**
 	 * Read contents of file.
 	 * 
-	 * @access	public
+	 * @access	protected
 	 * @param	string
 	 * @param	resource
 	 * @return	bool
@@ -149,7 +101,7 @@ abstract class Kohana_Storage
 	/**
 	 * Whether or not file exists
 	 * 
-	 * @access	public
+	 * @access	protected
 	 * @param	string
 	 * @return	bool
 	 */
@@ -158,12 +110,21 @@ abstract class Kohana_Storage
 	/**
 	 * Get URL
 	 * 
-	 * @access	public
+	 * @access	protected
 	 * @param	string
 	 * @param	string
 	 * @return	string
 	 */
 	abstract protected function _url($path, $protocol);	
+	
+	/**
+	 * Get list based on path
+	 * 
+	 * @access	protected
+	 * @param	string
+	 * @return	mixed
+	 */
+	abstract protected function _listing($path, $directory);
 	
 	/**
 	 * Write content to storage.
@@ -282,6 +243,27 @@ abstract class Kohana_Storage
 	}
 	
 	/**
+	 * Get listing
+	 * 
+	 * @access	public
+	 * @param	mixed	NULL|string
+	 * @param	mixed	NULL|Storage_Directory
+	 * @return	Storage_Directory
+	 * @throws	Storage_Exception
+	 */
+	public function listing($path = NULL, Storage_Directory $directory = NULL)
+	{
+		$directory = ($directory) ?: Storage_Directory::factory($path, $this);
+		
+		$listing = $this->_listing($this->_filter_path($path), $directory);
+		
+		if ( ! $listing instanceof Storage_Directory)
+			throw new Storage_Exception('Storage_Connection::listing expecting instance of Storage_Directory.');
+			
+		return $listing;
+	}
+	
+	/**
 	 * Filter path
 	 * 
 	 * @access	protected
@@ -290,6 +272,8 @@ abstract class Kohana_Storage
 	 */
 	protected function _filter_path($path)
 	{
-		return $this->_config['directory'] . trim($path, '/');
+		$path = $this->_config['directory'] . trim($path, '/');
+		
+		return ($path) ?: NULL;
 	}	
 }

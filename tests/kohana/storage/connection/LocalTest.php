@@ -9,7 +9,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_LocalTest extends Kohana_StorageTest
+class Kohana_Storage_Connection_LocalTest extends Kohana_Storage_ConnectionTest
 {	
 	/**
 	 * Verify internet and local has required configuration
@@ -37,6 +37,6 @@ class Kohana_Storage_LocalTest extends Kohana_StorageTest
      */
     public function factory()
     {
-    	return Storage::factory('local');
+    	return Storage_Connection::factory('local');
     }
 }

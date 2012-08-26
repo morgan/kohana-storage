@@ -8,7 +8,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_Atmos extends Storage
+class Storage_Connection_Atmos extends Storage_Connection
 {	
 	/**
 	 * Default config
@@ -222,6 +222,40 @@ class Kohana_Storage_Atmos extends Storage
 		return $url;
 	}
 
+	/**
+	 * Get listing
+	 * 
+	 * @access	protected
+	 * @param	string	Path of file 
+	 * @return	mixed
+	 */
+	protected function _listing($path, $listing)
+	{
+		$this->_load();
+
+		foreach ($this->_connection->listDirectory($this->_filter_path($path)) as $item)
+		{
+			$_path = $path . Storage::DELIMITER . $item->getName();
+			
+			if ($item->getType() == 'directory')
+			{
+				$listing->set(Storage_Directory::factory($_path, $this));
+			}
+			else
+			{				
+				$meta = $this->_connection->getSystemMetadata($this->_filter_path($_path));
+
+				$file = Storage_File::factory($_path, $this)
+					->size($meta->getMetadata('size')->getValue())
+					->modified(strtotime($meta->getMetadata('mtime')->getValue()));
+				
+				$listing->set($file);
+			}
+		}
+		
+		return $listing;
+	}	
+	
 	/**
 	 * Filter path
 	 * 

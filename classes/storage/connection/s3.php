@@ -8,7 +8,7 @@
  * @copyright	(c) 2011 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_S3 extends Storage
+class Storage_Connection_S3 extends Storage_Connection
 {	
 	/**
 	 * Default config
@@ -57,7 +57,7 @@ class Kohana_Storage_S3 extends Storage
 		{
 			require_once Kohana::find_file('vendor', 'aws-sdk/sdk.class');				
 				
-			$this->_driver = new AmazonS3(array('key' => $this->_config['key'], 'secret' => $this->_config['secret_key']));
+			$this->_driver = new AmazonS3($this->_config['key'], $this->_config['secret_key']);
 		}
 		
 		return $this->_driver;
@@ -161,6 +161,50 @@ class Kohana_Storage_S3 extends Storage
 		else
 			return $protocol . '://' . $this->_get_url() . $path;
 	}	
+	
+	/**
+	 * Get listing
+	 * 
+	 * @access	protected
+	 * @param	string	Path of file 
+	 * @return	mixed
+	 */
+	protected function _listing($path, $listing)
+	{
+		$this->_load();
+		
+		$config = array('delimiter' => Storage::DELIMITER);
+
+		if ($path !== NULL)
+		{
+			// Prefix requires trailing delimiter "path/"
+			$config['prefix'] = $path . Storage::DELIMITER;
+		}
+		
+		$response = $this->_driver->list_objects($this->_config['bucket'], $config);
+
+		foreach ($response->body->CommonPrefixes as $directory)
+		{
+			$name = (string) $directory->Prefix;
+
+			$object = Storage_Directory::factory($name, $this);
+			
+			$listing->set($object);
+		}		
+		
+		foreach ($response->body->Contents as $file)
+		{
+			$name = (string) $file->Key;
+			
+			$object = Storage_File::factory($name, $this)
+				->size((int) $file->Size)
+				->modified(strtotime($file->LastModified));
+			
+			$listing->set($object);
+		}
+		
+		return $listing;
+	}
 	
 	/**
 	 * Get URL based on whether CNAME is defined or default to S3 bucket URL
