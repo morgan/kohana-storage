@@ -1,6 +1,6 @@
 <?php
-// Copyright © 2008, EMC Corporation.
-// Redistribution and use in source and binary forms, with or without modification, 
+// Copyright © 2008 - 2012 EMC Corporation.
+// Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //
 //     + Redistributions of source code must retain the above copyright notice, 
@@ -25,7 +25,7 @@
 //      POSSIBILITY OF SUCH DAMAGE.
  
 /**
- * Defines the API interface for the SOAP and REST API wrappers.
+ * Defines the API interface for the REST API wrappers.
  */
 interface EsuApi {
 	/**
@@ -40,9 +40,9 @@ interface EsuApi {
 	 * may be null.  If $data is non-null and $mimeType is null, the MIME
 	 * type will default to application/octet-stream.
 	 * @param Checksum $checksum if not null, use the Checksum object to compute
-     * the checksum for the create object request.  If appending
-     * to the object with subsequent requests, use the same
-     * checksum object for each request.
+	 * the checksum for the create object request.  If appending
+	 * to the object with subsequent requests, use the same
+	 * checksum object for each request.
 	 * @return ObjectId Identifier of the newly created object.
 	 * @throws EsuException if the request fails.
 	 */
@@ -71,6 +71,21 @@ interface EsuApi {
 		$data = null, $mimeType = null, $checksum = null );
 	
 	/**
+	 * Reads an object's content.
+	 * @param ObjectId $id the identifier of the object whose content to read.
+	 * @param Extent $extent the portion of the object data to read.  Optional.
+	 * Default is null to read the entire object.
+	 * @param Checksum $checksum if not null, the given checksum object will be used
+	 * to verify checksums during the read operation.  Note that only erasure coded objects
+	 * will return checksums *and* if you're reading the object in chunks, you'll have to
+	 * read the data back sequentially to keep the checksum consistent.  If the read operation
+	 * does not return a checksum from the server, the checksum operation will be skipped.
+	 * @return string the object data read.
+	 */
+	public function readObject( $id, $extent = null, $checksum = null,
+			$systemTags = null, $userTags = null, $limit = null, &$token = null );
+
+	/**
 	 * Updates an object in the cloud.
 	 * @param Identifier $id The ID of the object to update
 	 * @param Acl $acl Access control list for the new object. Optional, if
@@ -84,9 +99,9 @@ interface EsuApi {
 	 * may be null.  If $data is non-null and $mimeType is null, the MIME
 	 * type will default to application/octet-stream.
 	 * @param Checksum $checksum if not null, use the Checksum object to compute
-     * the checksum for the update object request.  If appending
-     * to the object with subsequent requests, use the same
-     * checksum object for each request.
+	 * the checksum for the update object request.  If appending
+	 * to the object with subsequent requests, use the same
+	 * checksum object for each request.
 	 * @throws EsuException if the request fails.
 	 */
 	public function updateObject( $id, $acl = null, $metadata = null, 
@@ -99,6 +114,43 @@ interface EsuApi {
 	public function deleteObject( $id );
 	
 	/**
+	 * Renames a file or directory within the namespace.
+	 * @param ObjectPath $source The file or directory to rename
+	 * @param ObjectPath $destination The new path for the file or directory
+	 * @param ObjectPath $force If true, the desination file or
+	 * directory will be overwritten.  Directories must be empty to be
+	 * overwritten.  Also note that overwrite operations on files are
+	 * not synchronous; a delay may be required before the object is
+	 * available at its destination.
+	 */
+	public function rename( $source, $destination, $force );
+
+	/**
+	 * Lists the contents of a directory.
+	 * @param Identifier $id the identifier of the directory object to list.
+	 * @return array the directory entries in the directory.
+	 */
+	public function listDirectory( $id, $systemTags = null, $userTags = null, $limit = null, &$token = null );
+
+	/**
+	 * Returns all of an object's metadata and its ACL in
+	 * one call.
+	 * @param $id the object's identifier.
+	 * @return ObjectMetadata the object's metadata
+	 */
+	public function getAllMetadata( $id );
+
+	/**
+	 * Fetches the system metadata for the object.
+	 * @param ObjectId $id the identifier of the object whose system metadata
+	 * to fetch.
+	 * @param MetadataTags $tags A list of system metadata tags to fetch.  Optional.
+	 * Default value is null to fetch all system metadata.
+	 * @return MetadataList The list of system metadata for the object.
+	 */
+	public function getSystemMetadata( $id, $tags = null );
+
+	/**
 	 * Fetches the user metadata for the object.
 	 * @param ObjectId $id the identifier of the object whose user metadata
 	 * to fetch.
@@ -109,29 +161,66 @@ interface EsuApi {
 	public function getUserMetadata( $id, $tags = null );
 	
 	/**
-	 * Fetches the system metadata for the object.
-	 * @param ObjectId $id the identifier of the object whose system metadata
-	 * to fetch.
-	 * @param MetadataTags $tags A list of system metadata tags to fetch.  Optional.
-	 * Default value is null to fetch all system metadata.
-	 * @return MetadataList The list of system metadata for the object.
+	 * Writes the metadata into the object. If the tag does not exist, it is
+	 * created and set to the corresponding value. If the tag exists, the
+	 * existing value is replaced.
+	 * @param ObjectId $id the identifier of the object to update
+	 * @param MetadataList $metadata metadata to write to the object.
 	 */
-	public function getSystemMetadata( $id, $tags = null );
-	
+	public function setUserMetadata( $id, $metadata );
+
 	/**
-	 * Reads an object's content.
-	 * @param ObjectId $id the identifier of the object whose content to read.
-	 * @param Extent $extent the portion of the object data to read.  Optional.
-	 * Default is null to read the entire object.
-	 * @param Checksum $checksum if not null, the given checksum object will be used
-     * to verify checksums during the read operation.  Note that only erasure coded objects 
-     * will return checksums *and* if you're reading the object in chunks, you'll have to 
-     * read the data back sequentially to keep the checksum consistent.  If the read operation 
-     * does not return a checksum from the server, the checksum operation will be skipped.
-	 * @return string the object data read.
+	 * Deletes metadata items from an object.
+	 * @param ObjectId $id the identifier of the object whose metadata to
+	 * delete.
+	 * @param MetadataTags $tags the list of metadata tags to delete.
 	 */
-	public function readObject( $id, $extent = null, $checksum = null );
-	
+	public function deleteUserMetadata( $id, $tags );
+
+	/**
+	 * Returns the list of user metadata tags assigned to the object.
+	 * @param ObjectId $id the object whose metadata tags to list
+	 * @return MetadataTags the list of user metadata tags assigned to the object
+	 */
+	public function listUserMetadataTags( $id );
+
+	/**
+	 * Lists all objects with the given tag.
+	 * @param MetadataTag|string $queryTag  the tag to search for.
+	 * @return array The list of objects with the given tag.  If no objects
+	 * are found the array will be empty.
+	 * @throws EsuException if no objects are found (code 1003)
+	 */
+	public function listObjects( $queryTag, $limit = null, &$token = null );
+
+	/**
+	 * Lists all objects with the given tag including their metadata
+	 * @param MetadataTag|string $queryTag  the tag to search for.
+	 * @param string $systemTags            the system metadata to return.
+	 * @param string $userTags              the user metadata to return.
+	 * @return array The list of ObjectResult with the given tag.  If no objects
+	 * are found the array will be empty.
+	 * @throws EsuException if no objects are found (code 1003)
+	 */
+	public function listObjectsWithMetadata( $queryTag, $systemTags = null, $userTags = null, $limit = null, &$token = null );
+
+	/**
+	 * Returns a list of all tags that are listable for the tenant to which
+	 * the current user belongs
+ 	 * @param $tag MetadataTag|string optional.  If specified, the list will
+	 * be limited to the tags under the specified tag.
+	 * @return MetadataTags the list of listable tags.
+	 */
+	public function getListableTags( $tag = null );
+
+	/**
+	 * Executes a query for objects matching the specified XQuery string.
+	 * @param string $xquery the XQuery string to execute against the cloud.
+	 * @return array the list of objects matching the query.  If no objects
+	 * are found, the array will be empty.
+	 */
+	public function queryObjects( $xquery );
+
 	/**
 	 * Returns an object's ACL
 	 * @param ObjectId $id the identifier of the object whose ACL to read
@@ -139,30 +228,25 @@ interface EsuApi {
 	 */
 	public function getAcl( $id );
 	
-    /**
-     * Writes the metadata into the object. If the tag does not exist, it is 
-     * created and set to the corresponding value. If the tag exists, the 
-     * existing value is replaced.
-     * @param ObjectId $id the identifier of the object to update
-     * @param MetadataList $metadata metadata to write to the object.
-     */
-	public function setUserMetadata( $id, $metadata );
-	
-    /**
-     * Sets (overwrites) the ACL on the object.
-     * @param ObjectId $id the identifier of the object to change the ACL on.
-     * @param Acl $acl the new ACL for the object.
-     */
+	/**
+	 * Sets (overwrites) the ACL on the object.
+	 * @param ObjectId $id the identifier of the object to change the ACL on.
+	 * @param Acl $acl the new ACL for the object.
+	 */
 	public function setAcl( $id, $acl );
 	
 	/**
-	 * Deletes metadata items from an object.
-	 * @param ObjectId $id the identifier of the object whose metadata to 
-	 * delete.
-	 * @param MetadataTags $tags the list of metadata tags to delete.
+	 * An Atmos user (UID) can construct a pre-authenticated URL to an
+	 * object, which may then be used by anyone to retrieve the
+	 * object (e.g., through a browser). This allows an Atmos user
+	 * to let a non-Atmos user download a specific object. The
+	 * entire object/file is read.
+	 * @param Identifier $id the object to generate the URL for
+	 * @param int $expiration the expiration date of the URL (in unix time)
+	 * @return string a URL that can be used to share the object's content
 	 */
-	public function deleteUserMetadata( $id, $tags );
-	
+	public function getShareableUrl( $id, $expiration );
+
 	/**
 	 * Lists the versions of an object.
 	 * @param ObjectId $id the object whose versions to list.
@@ -180,113 +264,33 @@ interface EsuApi {
 	
 	/**
 	 * Restores content from a version to the base object (i.e. "promote" an 
-     * old version to the current version)
+	 * old version to the current version)
 	 * @param ObjectId $id Base object ID (target of the restore)
 	 * @param ObjectId $vId Version object ID to restore
 	 */
 	public function restoreVersion( $id, $vId );
 	
 	/**
-	 * Lists all objects with the given tag.
-	 * @param MetadataTag|string $tag the tag to search for
-	 * @return array The list of objects with the given tag.  If no objects
-	 * are found the array will be empty.
-	 * @throws EsuException if no objects are found (code 1003)
+	 * Gets information about an object including its replicas,
+	 * retention, and expiration information.
+	 * @param Identifier $id The object to get information about.
+	 * @return ObjectInfo information about the object
 	 */
-	public function listObjects( $tag );
-	
-	/**
-	 * Lists all objects with the given tag including their metadata
-	 * @param MetadataTag|string $tag the tag to search for
-	 * @return array The list of ObjectResult with the given tag.  If no objects
-	 * are found the array will be empty.
-	 * @throws EsuException if no objects are found (code 1003)
-	 */
-	public function listObjectsWithMetadata( $tag );
-	
-	/**
-	 * Returns a list of all tags that are listable for the tenant to which 
-	 * the current user belongs
- 	 * @param $tag MetadataTag|string optional.  If specified, the list will
-	 * be limited to the tags under the specified tag.
-	 * @return MetadataTags the list of listable tags.
-	 */
-	public function getListableTags( $tag = null );
-	
-	
-	/**
-	 * Returns the list of user metadata tags assigned to the object.
-	 * @param ObjectId $id the object whose metadata tags to list
-	 * @return MetadataTags the list of user metadata tags assigned to the object
-	 */
-	public function listUserMetadataTags( $id );
-	
-	/**
-	 * Executes a query for objects matching the specified XQuery string.
-	 * @param string $xquery the XQuery string to execute against the cloud.
-	 * @return array the list of objects matching the query.  If no objects
-	 * are found, the array will be empty.
-	 */
-	public function queryObjects( $xquery );
-	
-    /**
-     * Lists the contents of a directory.
-     * @param Identifier $id the identifier of the directory object to list.
-     * @return array the directory entries in the directory.
-     */
-    public function listDirectory( $id );
-    
-    /**
-     * An Atmos user (UID) can construct a pre-authenticated URL to an 
-     * object, which may then be used by anyone to retrieve the 
-     * object (e.g., through a browser). This allows an Atmos user 
-     * to let a non-Atmos user download a specific object. The 
-     * entire object/file is read.
-     * @param Identifier $id the object to generate the URL for
-     * @param int $expiration the expiration date of the URL (in unix time)
-     * @return string a URL that can be used to share the object's content
-     */
-    public function getShareableUrl( $id, $expiration );
-    
-    /**
-     * Returns all of an object's metadata and its ACL in
-     * one call.
-     * @param $id the object's identifier.
-     * @return ObjectMetadata the object's metadata
-     */
-    public function getAllMetadata( $id );
-    
-    /**
-     * Renames a file or directory within the namespace.
-     * @param ObjectPath $source The file or directory to rename
-     * @param ObjectPath $destination The new path for the file or directory
-     * @param ObjectPath $force If true, the desination file or 
-     * directory will be overwritten.  Directories must be empty to be 
-     * overwritten.  Also note that overwrite operations on files are
-     * not synchronous; a delay may be required before the object is
-     * available at its destination.
-     */
-    public function rename( $source, $destination, $force );
+	public function getObjectInformation( $id );
 
-    /**
-     * Gets information about the web service.  Currently, this only includes
-     * the version of Atmos.
-     * @return ServiceInformation the service information object.
-     */
-    public function getServiceInformation();
+	/**
+	 * Gets information about the web service.  Currently, this only includes
+	 * the version of Atmos.
+	 * @return ServiceInformation the service information object.
+	 */
+	public function getServiceInformation();
 
-    /**
-     * Returns the Atmos protocol information 
+	/**
+	 * Returns the Atmos protocol information
 	 * @param $protocolInfo
-     */
-	public function getProtocolInformation( &$protocolInfo );
-    
-    /**
-     * Gets information about an object including its replicas,
-     * retention, and expiration information.
-     * @param Identifier $id The object to get information about.
-     * @return ObjectInfo information about the object
-     */
-    public function getObjectInfo( $id );
-}
+	 */
+	public function getProtocolInformation();
+
+} // interface EsuApi
+
 ?>

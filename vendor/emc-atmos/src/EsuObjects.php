@@ -1,6 +1,6 @@
 <?php
-// Copyright © 2008, EMC Corporation.
-// Redistribution and use in source and binary forms, with or without modification, 
+// Copyright Â© 2008 - 2012 EMC Corporation.
+// Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //
 //     + Redistributions of source code must retain the above copyright notice, 
@@ -52,13 +52,13 @@ class ObjectId extends Identifier {
 	/**
 	 * Regular expression used to validate identifiers.
 	 */
-	private static $ID_FORMAT = "^[0-9a-f]{44}$";
+	private static $ID_FORMAT = '/^[0-9a-f]{44}$/';
 	
 	/**
 	 * Stores the string representation of the identifier
 	 * @var string
 	 */
-	private $id = "";
+	private $id = '';
 	
 	/**
 	 * Constructs a new object identifier
@@ -67,12 +67,12 @@ class ObjectId extends Identifier {
 	public function __construct( $id ) {
 		// Must be a string
 		if( !is_string( $id ) ) {
-			throw new EsuException( "Identifier must be a string" );
+			throw new EsuException( 'Identifier must be a string' );
 		}
 		
 		// Validate that the ID is correct
-		if( ereg( ObjectId::$ID_FORMAT, $id ) === false ) {
-			throw new EsuException( "ObjectId: " . $id . " is not in the correct format" );
+		if( ! preg_match( ObjectId::$ID_FORMAT, $id ) ) {
+			throw new EsuException( "ObjectId: $id is not in the correct format" );
 		}
 		
 		$this->id = $id;
@@ -97,14 +97,12 @@ class ObjectPath extends Identifier {
 	/**
 	 * Regular expression used to validate identifiers.
 	 */
-	private static $PATH_FORMAT = "^(/[a-zA-Z0-9 _\\.\\+\\-]+)+";
-	private static $DIR_TEST = '/$';
-	
+	private static $DIR_TEST = '/\/$/';
 	/**
 	 * Stores the string representation of the identifier
 	 * @var string
 	 */
-	private $path = "";
+	private $path = '';
 	
 	/**
 	 * Constructs a new object identifier
@@ -113,14 +111,7 @@ class ObjectPath extends Identifier {
 	public function __construct( $path ) {
 		// Must be a string
 		if( !is_string( $path ) ) {
-			throw new EsuException( "Path must be a string" );
-		}
-		
-		// Validate that the ID is correct
-		if ($path !== "/") {
-			if( ereg( ObjectPath::$PATH_FORMAT, $path ) === false ) {
-			throw new EsuException( "ObjectPath: " . $path . " is not in the correct format" );
-			}
+			throw new EsuException( 'Path must be a string' );
 		}
 		
 		$this->path = $path;
@@ -136,7 +127,7 @@ class ObjectPath extends Identifier {
 	}
 	
 	public function isDirectory() {
-		return !ereg( ObjectPath::$DIR_TEST, $this->path ) === false;
+		return (bool) preg_match( ObjectPath::$DIR_TEST, $this->path );
 	}
 }
 
@@ -163,14 +154,14 @@ class Metadata {
 		$this->value = $value;
 		$this->listable = $listable;
 	}
-	
+
 	/**
 	 * Returns a string representation of the metadata.
 	 * @return string the metadata object in the format name=value.  Listable
 	 * metadata will appear as name(listable)=value
 	 */
 	public function __toString() {
-		return $this->name . ($this->listable?"(listable)":"") . "=" . $this->value;
+		return $this->name . ($this->listable ? '(listable)' : '') . '=' . $this->value;
 	}
 	
 	/**
@@ -347,8 +338,8 @@ class Grantee {
 		
 		// If they pass in the subtennant ID, strip it off
 		// so we just have the UID.
-		if( strpos( $name, "/" ) !== false ) {
-			$this->name = substr( $name, strpos( $name, "/" ) +1 );
+		if( strpos( $name, '/' ) !== false ) {
+			$this->name = substr( $name, strpos( $name, '/' ) +1 );
 		}
 	}
 	
@@ -370,7 +361,7 @@ class Grantee {
 	}
 }
 // Initialize the static instance for the 'other' group.
-Grantee::$OTHER = new Grantee( "other", Grantee::GROUP );
+Grantee::$OTHER = new Grantee( 'other', Grantee::GROUP );
 
 class Permission {
 	const FULL_CONTROL = 'FULL_CONTROL';
@@ -426,7 +417,7 @@ class Grant {
 	 * Returns the grant in string form: grantee=permission
 	 */
 	public function __toString() {
-		return $this->grantee->getName() . "=" . $this->permission;
+		return $this->grantee->getName() . '=' . $this->permission;
 	}
 }
 
@@ -576,13 +567,18 @@ class MetadataTags {
 	 * Gets a metadata tag by name or index.
 	 */
 	public function getTag( $index_or_name ) {
-		if( is_string( $index_or_name ) ) {
-			// Search by name
-			return $this->byname[$index_or_name];
+		if( is_numeric( $index_or_name ) ) {
+			// Search by index
+			if ( isset( $this->byindex[$index_or_name] ) )
+				return $this->byindex[$index_or_name];
 		} else {
-			return $this->byindex[$index_or_name];
+			// Search by name
+			if ( isset( $this->byname[$index_or_name] ) )
+				return $this->byname[$index_or_name];
 		}
-	}	
+	return null;
+	}
+
 }
 
 /**
@@ -594,18 +590,9 @@ class DirectoryEntry {
 	private $id;
 	private $type;
 	private $name;
-	/**
-	 * @return the path
-	 */
-	public function getPath() {
-		return $this->path;
-	}
-	/**
-	 * @param path the path to set
-	 */
-	public function setPath( $path ) {
-		$this->path = $path;
-	}
+	private $smetadata;
+	private $umetadata;
+
 	/**
 	 * @return the id
 	 */
@@ -617,6 +604,18 @@ class DirectoryEntry {
 	 */
 	public function setId($id) {
 		$this->id = $id;
+	}
+	/**
+	 * @return the path
+	 */
+	public function getPath() {
+		return $this->path;
+	}
+	/**
+	 * @param path the path to set
+	 */
+	public function setPath( $path ) {
+		$this->path = $path;
 	}
 	/**
 	 * @return the type
@@ -642,18 +641,41 @@ class DirectoryEntry {
 	public function setName( $name ) {
 		$this->name = $name;
 	}
-	
+	/**
+	 * @return MetadataList the metadata
+	 */
+	public function getSystemMetadata() {
+		return $this->smetadata;
+	}
+	/**
+	 * @param MetadataList $metadata the metadata to set
+	 */
+	public function setSystemMetadata($metadata) {
+		$this->smetadata = $metadata;
+	}
+	/**
+	 * @return MetadataList the metadata
+	 */
+	public function getUserMetadata() {
+		return $this->umetadata;
+	}
+	/**
+	 * @param MetadataList $metadata the metadata to set
+	 */
+	public function setUserMetadata($metadata) {
+		$this->umetadata = $metadata;
+	}
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public function toString() {
-		return $this->path . " - " . $this->type . " - " . $this->id;
+		return $this->path . ' - ' . $this->type . ' - ' . $this->id;
 	}
 }
 
 /**
  * Used to return all of an object's metadata at once
- * @author jason
  */
 class ObjectMetadata {
 	private $metadata;
@@ -692,6 +714,7 @@ class ObjectMetadata {
 class ObjectResult {
 	private $id;
 	private $metadata;
+
 	/**
 	 * @return ObjectId the id
 	 */
@@ -719,6 +742,63 @@ class ObjectResult {
 	
 }
 
+/**
+ * ObjectVersions are returned from listVersions.  They contain the
+ * version number, version ID and version inception (create) time.
+ */
+class ObjectVersion {
+	/**
+	 * Regular expression used to validate identifiers.
+	 */
+	private static $ID_FORMAT = '/^[0-9a-f]{44}$/';
+
+	private $number;
+	private $id;
+	private $itime;
+
+	/**
+	 * Constructs a new object version
+	 */
+	public function __construct( $number, $id, $itime ) {
+		// Validate our parameters
+		if( !is_numeric( $number ) ) {
+			throw new EsuException( 'Version number must be a number' );
+		}
+		if( !is_string( $id ) ) {
+			throw new EsuException( 'Version id must be a string' );
+		}
+		if( ! preg_match( ObjectVersion::$ID_FORMAT, $id ) ) {
+			throw new EsuException( "ObjectId: $id is not in the correct format" );
+		}
+		if( !is_string( $itime ) ) {
+			throw new EsuException( 'Version time must be a string' );
+		}
+
+		$this->number = $number;
+		$this->id     = $id;
+		$this->itime  = $itime;
+	} // ObjectVersion::__construct
+
+	/**
+	 * @return the version number
+	 */
+	public function getNumber() {
+		return $this->number;
+	}
+	/**
+	 * @return the version id
+	 */
+	public function getId() {
+		return $this->id;
+	}
+	/**
+	 * @return the version inception (create) time
+	 */
+	public function getTime() {
+		return $this->itime;
+	}
+}
+
 class ServiceInformation {
 	private $atmosVersion;
 	
@@ -741,15 +821,16 @@ class ServiceInformation {
 
 class Checksum {
 	private $digest;
-	private $expected_value;
-	private $offset;
 	private $algorithm;
+	private $offset;
+	private $expected_value;
 	
 	public function __construct( $algorithm ) {
 		// For now, we only support SHA0
 		$this->digest = new SHA0();
-		$this->algorithm = "SHA0";
-		$this->offset = "0";
+		$this->algorithm = 'SHA0';
+		$this->offset = '0';
+		$this->expected_value = null;
 	}
 	
 	public function getAlgorithmName() {
@@ -772,11 +853,11 @@ class Checksum {
 	 * @param string $str
 	 */
 	function strhex( $str ) {
-		$out = "";
+		$out = '';
 		for($i=0; $i<strlen($str); $i++) {
 			$x = dechex(ord($str[$i]));
 			if( strlen($x) == 1 ){
-				$x = "0".$x;
+				$x = '0'.$x;
 			}
 			$out .= $x;
 		}
@@ -785,13 +866,11 @@ class Checksum {
 	
 	
 	/**
-	 * Returns the checksum in a value suitable for inclusion in the 
-	 * x-emc-wschecksum method.
+	 * Returns the checksum in a format suitable for inclusion in the
+	 * x-emc-wschecksum header.
 	 */
 	public function __toString() {
-		$out = $this->algorithm."/".$this->offset."/".$this->getHashValue();
-		//print "" . gettype($out) . ": " + $out;
-		
+		$out = $this->algorithm.'/'.$this->offset.'/'.$this->getHashValue();
 		return $out;
 	}
 	
@@ -913,7 +992,7 @@ class ObjectRetention {
 	public $enabled;
 	/**
 	 * Timestamp when the retention period ends
-	 * @var DateTime
+	 * @var String  
 	 */
 	public $endAt;
 }

@@ -1,5 +1,5 @@
 <?php
-// Copyright © 2008, EMC Corporation.
+// Copyright © 2008-2012, EMC Corporation.
 // Redistribution and use in source and binary forms, with or without modification, 
 // are permitted provided that the following conditions are met:
 //
@@ -50,7 +50,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 * Hostname or IP of ESU server.  Change this value to your server's
 	 * hostname or ip address.
 	 */
-	private $host = "accesspoint.atmosonline.com";
+	private $host = 'api.atmosonline.com';
 	
 	/**
 	 * Port of ESU server (usually 80 or 443)
@@ -97,7 +97,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 			try {
 				$this->esu->deleteObject( $cleanItem );
 			} catch( Exception $e ) {
-				print "Failed to delete " . $cleanItem . ": " . $e->getMessage();
+				print 'Failed to delete ' . $cleanItem . ': ' . $e->getMessage();
 			}
 		}
 	}
@@ -116,7 +116,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read back the content
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( '', $content, 'object content wrong' );
 		
 	}
 	
@@ -135,7 +135,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 * Test creating one empty object on a path.  No metadata, no content.
 	 */
 	public function testCreateObjectOnPathWithParens() {
-		$path = new ObjectPath( '/' . $this->random8() . "(" . $this->random8() . ")" );
+		$path = new ObjectPath( '/' . $this->random8() . '(' . $this->random8() . ')' );
 		
 		$id = $this->esu->createObjectOnPath( $path );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
@@ -158,13 +158,13 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 * Test creating an object with content but without metadata
 	 */
 	public function testCreateObjectWithContent() {
-		$id = $this->esu->createObject( null, null, "hello", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'hello', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 		
 		// Read back the content
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 	}
 	
 	/**
@@ -173,16 +173,16 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testCreateObjectWithContentOnPath() {
 		$path = new ObjectPath( '/' . $this->random8() );
 		
-		$id = $this->esu->createObjectOnPath( $path, null, null, "hello", "text/plain" );
+		$id = $this->esu->createObjectOnPath( $path, null, null, 'hello', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $path;
 		
 		// Read back the content
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong using id" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong using id' );
 		
 		$content = $this->esu->readObject( $path );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong using path" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong using path' );
 	}
 	
 	/**
@@ -192,10 +192,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$path = new ObjectPath( '/' . $this->random8() );
 		
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -206,15 +206,15 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read and validate the metadata
 		$meta = $this->esu->getUserMetadata( $path, null );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "foo2 foo2", $meta->getMetadata( "listable2" )->getValue(), "value of 'listable2' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar2 bar2", $meta->getMetadata( "unlistable2" )->getValue(), "value of 'unlistable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo2 foo2', $meta->getMetadata( 'listable2' )->getValue(), "value of 'listable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar2 bar2', $meta->getMetadata( 'unlistable2' )->getValue(), "value of 'unlistable2' wrong" );
 		// Check listable flags
-//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( "listable" )->isListable(), "'listable' is not listable" );
-//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( "listable2" )->isListable(), "'listable2' is not listable" );
-//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( "unlistable" )->isListable(), "'unlistable' is listable" );
-//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( "unlistable2" )->isListable(), "'unlistable2' is listable" );
+//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( 'listable' )->isListable(), "'listable' is not listable" );
+//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( 'listable2' )->isListable(), "'listable2' is not listable" );
+//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( 'unlistable' )->isListable(), "'unlistable' is listable" );
+//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( 'unlistable2' )->isListable(), "'unlistable2' is listable" );
 		
 	}
 	
@@ -223,10 +223,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testCreateObjectWithMetadata() {
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -237,15 +237,15 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read and validate the metadata
 		$meta = $this->esu->getUserMetadata( $id, null );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "foo2 foo2", $meta->getMetadata( "listable2" )->getValue(), "value of 'listable2' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar2 bar2", $meta->getMetadata( "unlistable2" )->getValue(), "value of 'unlistable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo2 foo2', $meta->getMetadata( 'listable2' )->getValue(), "value of 'listable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar2 bar2', $meta->getMetadata( 'unlistable2' )->getValue(), "value of 'unlistable2' wrong" );
 		// Check listable flags
-//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( "listable" )->isListable(), "'listable' is not listable" );
-//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( "listable2" )->isListable(), "'listable2' is not listable" );
-//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( "unlistable" )->isListable(), "'unlistable' is listable" );
-//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( "unlistable2" )->isListable(), "'unlistable2' is listable" );
+//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( 'listable' )->isListable(), "'listable' is not listable" );
+//		PHPUnit_Framework_Assert::assertEquals( true, $meta->getMetadata( 'listable2' )->isListable(), "'listable2' is not listable" );
+//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( 'unlistable' )->isListable(), "'unlistable' is listable" );
+//		PHPUnit_Framework_Assert::assertEquals( false, $meta->getMetadata( 'unlistable2' )->isListable(), "'unlistable2' is listable" );
 		
 	}
 
@@ -263,12 +263,12 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 			// Create an object.  Should fail.
 			$id = $this->esu->createObject();
 		} catch( EsuException $e ) {
-			//print $e . " (failure expected)";
+			//print $e . ' (failure expected)';
 			PHPUnit_Framework_Assert::assertEquals( 1032, $e->getCode(), 
-				"Expected error code 1032 for signature failure" );
+				'Expected error code 1032 for signature failure' );
 			return;
 		}
-		$this->fail( "Exception not thrown!" );
+		$this->fail( 'Exception not thrown!' );
 	}
 	
 	/**
@@ -276,16 +276,16 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testFourOhFour() {
 		// break the context root
-		$this->esu->setContext( "/restttt" );
+		$this->esu->setContext( '/restttt' );
 		try {
 			$id = $this->esu->createObject();
 		} catch( EsuException $e ) {
-			//print $e . " (failure expected)" . "\n";
+			//print $e . ' (failure expected)' . "\n";
 			PHPUnit_Framework_Assert::assertEquals( 404, $e->getCode(), 
-				"Expected error code 404 for not found" );
+				'Expected error code 404 for not found' );
 			return;
 		}
-		$this->fail( "Exception not thrown!" );
+		$this->fail( 'Exception not thrown!' );
 		
 	}
 	
@@ -293,18 +293,18 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 * Test reading an object's content
 	 */
 	public function testReadObject() {
-		$id = $this->esu->createObject( null, null, "hello", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'hello', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 		
 		// Read back the content
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 		
 		// Read back only 2 bytes
 		$extent = new Extent( 1, 2 );
 		$content = $this->esu->readObject( $id, $extent );
-		PHPUnit_Framework_Assert::assertEquals( "el", $content, "partial object content wrong" );		
+		PHPUnit_Framework_Assert::assertEquals( 'el', $content, 'partial object content wrong' );
 	}
 	
 	/**
@@ -331,10 +331,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testGetUserMetadata() {
 		// Create an object with user metadata
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -345,13 +345,13 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read only part of the metadata
 		$mtags = new MetadataTags();
-		$mtags->addTag( new MetadataTag( "listable", true ) );
-		$mtags->addTag( new MetadataTag( "unlistable", false ) );
+		$mtags->addTag( new MetadataTag( 'listable', true ) );
+		$mtags->addTag( new MetadataTag( 'unlistable', false ) );
 		$meta = $this->esu->getUserMetadata( $id, $mtags );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "listable2" ), "value of 'listable2' should not have been returned" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "unlistable2" ), "value of 'unlistable2' should not have been returned" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'listable2' ), "value of 'listable2' should not have been returned" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'unlistable2' ), "value of 'unlistable2' should not have been returned" );
 		
 	}
 	
@@ -361,10 +361,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testDeleteUserMetadata() {
 		// Create an object with metadata
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -375,17 +375,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Delete a couple of the metadata entries
 		$mtags = new MetadataTags();
-		$mtags->addTag( new MetadataTag( "listable2", true ) );
-		$mtags->addTag( new MetadataTag( "unlistable2", false ) );
+		$mtags->addTag( new MetadataTag( 'listable2', true ) );
+		$mtags->addTag( new MetadataTag( 'unlistable2', false ) );
 		$this->esu->deleteUserMetadata( $id, $mtags );
 		
 		// Read back the metadata for the object and ensure the deleted
 		// entries don't exist
 		$meta = $this->esu->getUserMetadata( $id );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "listable2" ), "metadata 'listable2' should have been deleted" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "unlistable2" ), "metadata 'unlistable2' should have been deleted" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'listable2' ), "metadata 'listable2' should have been deleted" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'unlistable2' ), "metadata 'unlistable2' should have been deleted" );
 	}
 	
 	/**
@@ -394,10 +394,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testVersionObject() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -413,10 +413,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Fetch the version and read its data
 		$meta = $this->esu->getUserMetadata( $vid );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "foo2 foo2", $meta->getMetadata( "listable2" )->getValue(), "value of 'listable2' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar2 bar2", $meta->getMetadata( "unlistable2" )->getValue(), "value of 'unlistable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo2 foo2', $meta->getMetadata( 'listable2' )->getValue(), "value of 'listable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar2 bar2', $meta->getMetadata( 'unlistable2' )->getValue(), "value of 'unlistable2' wrong" );
 		
 	}
 	
@@ -426,10 +426,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testListVersions() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -458,22 +458,22 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 * Test restoring an older version to the base version
 	 */
     public function testRestoreVersion() {
-        $id = $this->esu->createObject(null, null, "Base Version Content", "text/plain");
-        PHPUnit_Framework_Assert::assertNotNull($id, "null ID returned");
+        $id = $this->esu->createObject(null, null, 'Base Version Content', 'text/plain');
+        PHPUnit_Framework_Assert::assertNotNull($id, 'null ID returned');
         $this->cleanup[] = $id;
 
         // Version the object
         $vId = $this->esu->versionObject($id);
 
         // Update the object content
-        $this->esu->updateObject($id, null, null, null, "Child Version Content -- You should never see me", "text/plain");
+        $this->esu->updateObject($id, null, null, null, 'Child Version Content -- You should never see me', 'text/plain');
 
         // Restore the original version
         $this->esu->restoreVersion($id, $vId);
 
         // Read back the content
         $content = $this->esu->readObject($id, null, null);
-        PHPUnit_Framework_Assert::assertEquals( "Base Version Content", $content, "object content wrong" );
+        PHPUnit_Framework_Assert::assertEquals( 'Base Version Content', $content, 'object content wrong' );
 
     }
 	
@@ -484,10 +484,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testGetSystemMetadata() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -498,14 +498,14 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read only part of the metadata
 		$mtags = new MetadataTags();
-		$mtags->addTag( new MetadataTag( "atime", false ) );
-		$mtags->addTag( new MetadataTag( "ctime", false ) );
+		$mtags->addTag( new MetadataTag( 'atime', false ) );
+		$mtags->addTag( new MetadataTag( 'ctime', false ) );
 		$meta = $this->esu->getSystemMetadata( $id, $mtags );
-		PHPUnit_Framework_Assert::assertNotNull( "foo", $meta->getMetadata( "atime" ), "value of 'atime' missing" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "mtime" ), "value of 'mtime' should not have been returned" );
-		PHPUnit_Framework_Assert::assertNotNull( "bar", $meta->getMetadata( "ctime" ), "value of 'ctime' missing" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "gid" ), "value of 'gid' should not have been returned" );
-		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( "listable" ), "value of 'listable' should not have been returned" );
+		PHPUnit_Framework_Assert::assertNotNull( 'foo', $meta->getMetadata( 'atime' ), "value of 'atime' missing" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'mtime' ), "value of 'mtime' should not have been returned" );
+		PHPUnit_Framework_Assert::assertNotNull( 'bar', $meta->getMetadata( 'ctime' ), "value of 'ctime' missing" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'gid' ), "value of 'gid' should not have been returned" );
+		PHPUnit_Framework_Assert::assertNull( $meta->getMetadata( 'listable' ), "value of 'listable' should not have been returned" );
 	}
 	
 	/**
@@ -514,10 +514,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testListObjects() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -527,14 +527,14 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$this->cleanup[] = $id;
 
 		// List the objects.  Make sure the one we created is in the list
-		$objects = $this->esu->listObjects( "listable" );
+		$objects = $this->esu->listObjects( 'listable' );
 		PHPUnit_Framework_Assert::assertTrue( count( $objects ) > 0, 'No objects returned' );
 		PHPUnit_Framework_Assert::assertTrue( array_search( $id, $objects ) !== false, 'object not found in list' );
 		
 		// Check for unlisted
 		try {
-			$objects = $this->esu->listObjects( "unlistable" );
-			$this->fail( "Exception not thrown!" );
+			$objects = $this->esu->listObjects( 'unlistable' );
+			$this->fail( 'Exception not thrown!' );
 		} catch( EsuException $e ) {
 			// This should happen.
 			PHPUnit_Framework_Assert::assertEquals( 1003, $e->getCode(), 'Expected 1003 for not found' );
@@ -547,10 +547,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testListObjectsWithMetadata() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -560,7 +560,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$this->cleanup[] = $id;
 
 		// List the objects.  Make sure the one we created is in the list
-		$objects = $this->esu->listObjectsWithMetadata( "listable" );
+		$objects = $this->esu->listObjectsWithMetadata( 'listable' );
 		PHPUnit_Framework_Assert::assertTrue( count( $objects ) > 0, 'No objects returned' );
 		
 		$found = false;
@@ -570,10 +570,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 				// Check metadata
 				PHPUnit_Framework_Assert::assertNotNull( $object->getMetadata(), 'Metadata is null' );
 				PHPUnit_Framework_Assert::assertTrue( $object->getMetadata()->count() > 0, 'no metadata on object' );
-				PHPUnit_Framework_Assert::assertNotNull( $object->getMetadata()->getMetadata( "unlistable" ), 
+				PHPUnit_Framework_Assert::assertNotNull( $object->getMetadata()->getMetadata( 'unlistable' ),
 						'Metadata for unlistable is null' );				
-				PHPUnit_Framework_Assert::assertEquals( "bar", 
-					$object->getMetadata()->getMetadata( "unlistable" )->getValue(), 
+				PHPUnit_Framework_Assert::assertEquals( 'bar',
+					$object->getMetadata()->getMetadata( 'unlistable' )->getValue(),
 					"value of 'unlistable' wrong" );
 			}
 		}
@@ -581,8 +581,8 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Check for unlisted
 		try {
-			$objects = $this->esu->listObjectsWithMetadata( "unlistable" );
-			$this->fail( "Exception not thrown!" );
+			$objects = $this->esu->listObjectsWithMetadata( 'unlistable' );
+			$this->fail( 'Exception not thrown!' );
 		} catch( EsuException $e ) {
 			// This should happen.
 			PHPUnit_Framework_Assert::assertEquals( 1003, $e->getCode(), 'Expected 1003 for not found' );
@@ -595,10 +595,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testGetListableTags() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "list/able/2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "list/able/not", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'list/able/2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'list/able/not', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -609,15 +609,15 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// List tags.  Ensure our object's tags are in the list.
 		$tags = $this->esu->getListableTags();
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "listable" ), 'listable tag not returned' );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "list" ), 'list/able/2 root tag not returned' );
-		PHPUnit_Framework_Assert::assertNull( $tags->getTag( "list/able/not" ), 'list/able/not tag returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'listable' ), 'listable tag not returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'list' ), 'list/able/2 root tag not returned' );
+		PHPUnit_Framework_Assert::assertNull( $tags->getTag( 'list/able/not' ), 'list/able/not tag returned' );
 		
 		// List child tags
-		$tags = $this->esu->getListableTags( "list/able" );
-		PHPUnit_Framework_Assert::assertNull( $tags->getTag( "listable" ), 'non-child returned' );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "2" ), 'list/able/2 tag not returned' );
-		PHPUnit_Framework_Assert::assertNull( $tags->getTag( "not" ), 'list/able/not tag returned' );
+		$tags = $this->esu->getListableTags( 'list/able' );
+		PHPUnit_Framework_Assert::assertNull( $tags->getTag( 'listable' ), 'non-child returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( '2' ), 'list/able/2 tag not returned' );
+		PHPUnit_Framework_Assert::assertNull( $tags->getTag( 'not' ), 'list/able/not tag returned' );
 		
 	}
 	
@@ -627,10 +627,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testListUserMetadataTags() {
 		// Create an object
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "list/able/2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "list/able/not", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'list/able/2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'list/able/not', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -641,17 +641,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// List tags
 		$tags = $this->esu->listUserMetadataTags( $id );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "listable" ), 'listable tag not returned' );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "list/able/2" ), 'list/able/2 tag not returned' );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "unlistable" ), 'unlistable tag not returned' );
-		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( "list/able/not" ), 'list/able/not tag not returned' );
-		PHPUnit_Framework_Assert::assertNull( $tags->getTag( "unknowntag" ), 'unknown tag returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'listable' ), 'listable tag not returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'list/able/2' ), 'list/able/2 tag not returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'unlistable' ), 'unlistable tag not returned' );
+		PHPUnit_Framework_Assert::assertNotNull( $tags->getTag( 'list/able/not' ), 'list/able/not tag not returned' );
+		PHPUnit_Framework_Assert::assertNull( $tags->getTag( 'unknowntag' ), 'unknown tag returned' );
 		
 		// Check listable flag
-		PHPUnit_Framework_Assert::assertEquals( true, $tags->getTag( "listable" )->isListable(), "'listable' is not listable" );
-		PHPUnit_Framework_Assert::assertEquals( true, $tags->getTag( "list/able/2" )->isListable(), "'list/able/2' is not listable" );
-		PHPUnit_Framework_Assert::assertEquals( false, $tags->getTag( "unlistable" )->isListable(), "'unlistable' is listable" );
-		PHPUnit_Framework_Assert::assertEquals( false, $tags->getTag( "list/able/not" )->isListable(), "'list/able/not' is listable" );
+		PHPUnit_Framework_Assert::assertEquals( true, $tags->getTag( 'listable' )->isListable(), "'listable' is not listable" );
+		PHPUnit_Framework_Assert::assertEquals( true, $tags->getTag( 'list/able/2' )->isListable(), "'list/able/2' is not listable" );
+		PHPUnit_Framework_Assert::assertEquals( false, $tags->getTag( 'unlistable' )->isListable(), "'unlistable' is listable" );
+		PHPUnit_Framework_Assert::assertEquals( false, $tags->getTag( 'list/able/not' )->isListable(), "'list/able/not' is listable" );
 	}
 
 // Not supported by Atmos 1.2
@@ -662,10 +662,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 //	public function testQueryObjects() {
 //		// Create an object
 //		$mlist = new MetadataList();
-//		$listable = new Metadata( "listable", "foo", true );
-//		$unlistable = new Metadata( "unlistable", "bar", false );
-//		$listable2 = new Metadata( "list/able/2", "foo2 foo2", true );
-//		$unlistable2 = new Metadata( "list/able/not", "bar2 bar2", false );
+//		$listable = new Metadata( 'listable', 'foo', true );
+//		$unlistable = new Metadata( 'unlistable', 'bar', false );
+//		$listable2 = new Metadata( 'list/able/2', 'foo2 foo2', true );
+//		$unlistable2 = new Metadata( 'list/able/not', 'bar2 bar2', false );
 //		$mlist->addMetadata( $listable );
 //		$mlist->addMetadata( $unlistable );
 //		$mlist->addMetadata( $listable2 );
@@ -689,23 +689,23 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	public function testUpdateObjectMetadata() {
 		// Create an object
 		$mlist = new MetadataList();
-		$unlistable = new Metadata( "unlistable", "foo", false );
+		$unlistable = new Metadata( 'unlistable', 'foo', false );
 		$mlist->addMetadata( $unlistable );
-		$id = $this->esu->createObject( null, $mlist, "hello", null );
+		$id = $this->esu->createObject( null, $mlist, 'hello', null );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 
 		// Update the metadata
-		$unlistable->setValue( "bar" );
+		$unlistable->setValue( 'bar' );
 		$this->esu->setUserMetadata( $id, $mlist );
 		
 		// Re-read the metadata
 		$meta = $this->esu->getUserMetadata( $id, null );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
 		
 		// Check to ensure object contents were not modified
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 		
 	}
 	
@@ -740,17 +740,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testUpdateObjectContent() {
 		// Create an object
-		$id = $this->esu->createObject( null, null, "hello", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'hello', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 		
 		// Update part of the content
 		$extent = new Extent( 1,1 );
-		$this->esu->updateObject( $id, null, null, $extent, "u", null ); 
+		$this->esu->updateObject( $id, null, null, $extent, 'u', null );
 		
 		// Read back the content and check it
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hullo", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hullo', $content, 'object content wrong' );
 	}
 	
 	/**
@@ -758,16 +758,16 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testReplaceObjectContent() {
 		// Create an object
-		$id = $this->esu->createObject( null, null, "hello", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'hello', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 		
 		// Update all of the content
-		$this->esu->updateObject( $id, null, null, null, "bonjour", null ); 
+		$this->esu->updateObject( $id, null, null, null, 'bonjour', null );
 		
 		// Read back the content and check it
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "bonjour", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bonjour', $content, 'object content wrong' );
 	}
 	
 	/**
@@ -777,7 +777,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		// use a blocksize of 1 to test multiple transfers.
 		$uploadHelper = new UploadHelper( $this->esu, 1 );
 		$tempFile = tmpfile();
-		fprintf( $tempFile, "hello" );
+		fprintf( $tempFile, 'hello' );
 		fseek( $tempFile, 0 );
 		
 		// Create an object from our file stream
@@ -789,17 +789,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read contents back and check them
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 	}
 	
 	public function testCreateHelper2() {
 		// use a blocksize of 1 to test multiple transfers.
 		$uploadHelper = new UploadHelper( $this->esu, 1 );
 		
-		$tmpfname = tempnam( sys_get_temp_dir(), "FOO");
+		$tmpfname = tempnam( sys_get_temp_dir(), 'FOO');
 
-		$handle = fopen($tmpfname, "w");
-		fwrite($handle, "hello");
+		$handle = fopen($tmpfname, 'w');
+		fwrite($handle, 'hello');
 		fclose($handle);
 		
 		// Create an object from our file stream
@@ -813,7 +813,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read contents back and check them
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 		
 		
 	}
@@ -826,13 +826,13 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$uploadHelper = new UploadHelper( $this->esu, 1 );
 
 		// Create an object with content.
-		$id = $this->esu->createObject( null, null, "Four score and twenty years ago", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'Four score and twenty years ago', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 	
 		// update the object contents
 		$tempFile = tmpfile();
-		fprintf( $tempFile, "hello" );
+		fprintf( $tempFile, 'hello' );
 		fseek( $tempFile, 0 );
 		
 		$uploadHelper->updateObjectFromStream( $id, $tempFile );
@@ -842,7 +842,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read contents back and check them
 		$content = $this->esu->readObject( $id );
-		PHPUnit_Framework_Assert::assertEquals( "hello", $content, "object content wrong" );		
+		PHPUnit_Framework_Assert::assertEquals( 'hello', $content, 'object content wrong' );
 	}
 	
 	/**
@@ -853,14 +853,14 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 //		$uploadHelper = new UploadHelper( $this->esu );
 //
 //		// Create an object with content.
-//		$id = $this->esu->createObject( null, null, "Four score and twenty years ago", "text/plain" );
+//		$id = $this->esu->createObject( null, null, 'Four score and twenty years ago', 'text/plain' );
 //		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 //		$this->cleanup[] = $id;
 //	
 //		// update the object contents
 //		$tempFile = tmpfile();
 //		for( $i = 0; $i<200000; $i++ ) {
-//			fprintf( $tempFile, "hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello\n" );	
+//			fprintf( $tempFile, 'hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello\n' );
 //		}
 //		fseek( $tempFile, 0 );
 //		
@@ -888,7 +888,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testDownloadHelper() {
 		// Create an object with content.
-		$id = $this->esu->createObject( null, null, "Four score and twenty years ago", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'Four score and twenty years ago', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 		
@@ -903,7 +903,7 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		// Check the download
 		fseek( $tempFile, 0 );
 		$data = fgets( $tempFile );
-		PHPUnit_Framework_Assert::assertEquals( "Four score and twenty years ago", $data, "object content wrong" );						
+		PHPUnit_Framework_Assert::assertEquals( 'Four score and twenty years ago', $data, 'object content wrong' );
 		
 		// Download again 1 byte in a request
 		fseek( $tempFile, 0 );
@@ -916,15 +916,15 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		// Check the download
 		fseek( $tempFile, 0 );
 		$data = fgets( $tempFile );
-		PHPUnit_Framework_Assert::assertEquals( "Four score and twenty years ago", $data, "object content wrong" );						
+		PHPUnit_Framework_Assert::assertEquals( 'Four score and twenty years ago', $data, 'object content wrong' );
 	}
 	
 	public function testIsDirectory() {
-		$op1 = new ObjectPath( "/not/a/dir" );
-		$op2 = new ObjectPath( "/is/a/dir/" );
+		$op1 = new ObjectPath( '/not/a/dir' );
+		$op2 = new ObjectPath( '/is/a/dir/' );
 		
-		PHPUnit_Framework_Assert::assertFalse( $op1->isDirectory(), "Should not be a directory" );
-		PHPUnit_Framework_Assert::assertTrue( $op2->isDirectory(), "Should be a directory" );
+		PHPUnit_Framework_Assert::assertFalse( $op1->isDirectory(), 'Should not be a directory' );
+		PHPUnit_Framework_Assert::assertTrue( $op2->isDirectory(), 'Should be a directory' );
 	}
 	
 	public function testListDirectory() {
@@ -932,9 +932,9 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$file = $this->random8();
 		$dir2 = $this->random8();
 		
-		$dirPath = new ObjectPath( "/" . $dir . "/" );
-		$op = new ObjectPath( "/" . $dir . "/" . $file );
-		$dirPath2 = new ObjectPath( "/" . $dir . "/" . $dir2 . "/" );
+		$dirPath = new ObjectPath( '/' . $dir . '/' );
+		$op = new ObjectPath( '/' . $dir . '/' . $file );
+		$dirPath2 = new ObjectPath( '/' . $dir . '/' . $dir2 . '/' );
 		
 		$dirId = $this->esu->createObjectOnPath( $dirPath );
 		$id = $this->esu->createObjectOnPath( $op );
@@ -944,17 +944,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read back the objects
 		$data = $this->esu->readObject( $op );
-		PHPUnit_Framework_Assert::assertEquals( "", $data, "object content wrong" );
+		PHPUnit_Framework_Assert::assertEquals( '', $data, 'object content wrong' );
 		
 		// List the contents of the directory
 		$dirList = $this->esu->listDirectory( $dirPath );
-		PHPUnit_Framework_Assert::assertTrue( $this->directoryContains( $dirList, $op ), "Directory missing file" );
-		PHPUnit_Framework_Assert::assertTrue( $this->directoryContains( $dirList, $dirPath2 ), "Directory missing subdir" );
+		PHPUnit_Framework_Assert::assertTrue( $this->directoryContains( $dirList, $op ), 'Directory missing file' );
+		PHPUnit_Framework_Assert::assertTrue( $this->directoryContains( $dirList, $dirPath2 ), 'Directory missing subdir' );
 	}
 	
     public function testGetShareableUrl() {
 		// Create an object with content.
-		$id = $this->esu->createObject( null, null, "Four score and twenty years ago", "text/plain" );
+		$id = $this->esu->createObject( null, null, 'Four score and twenty years ago', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $id;
 
@@ -962,23 +962,23 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
         $expiration = time() + 3600 * 4;
         $url = $this->esu->getShareableUrl( $id, $expiration );
         
-        echo "Sharable URL: " . $url . "\n";
+        echo 'Sharable URL: ' . $url . "\n";
         
         // Read the data back
         $req = &new HTTP_Request2( $url );
         $response = $req->send();
 		if( $response->getStatus() > 399 ) {
-			die( "HTTP request to " . $url . " failed: " . $response->getReasonPhrase() );
+			die( 'HTTP request to ' . $url . ' failed: ' . $response->getReasonPhrase() );
 		}
         $content = $response->getBody();
-		PHPUnit_Framework_Assert::assertEquals( "Four score and twenty years ago", $content, "object content wrong" );						
+		PHPUnit_Framework_Assert::assertEquals( 'Four score and twenty years ago', $content, 'object content wrong' );
     }
     
     public function testGetShareableUrlWithPath() {
 		// Create an object with content.
 		$path = new ObjectPath( '/' . $this->random8() );
 		
-		$id = $this->esu->createObjectOnPath( $path, null, null, "Four score and twenty years ago", "text/plain" );
+		$id = $this->esu->createObjectOnPath( $path, null, null, 'Four score and twenty years ago', 'text/plain' );
 		PHPUnit_Framework_Assert::assertNotNull( $id, 'null ID returned' );
 		$this->cleanup[] = $path;
 
@@ -986,17 +986,17 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
         $expiration = time() + 3600 * 4;
         $url = $this->esu->getShareableUrl( $path, $expiration );
         
-        echo "Sharable URL: " . $url . "\n";
+        echo 'Sharable URL: ' . $url . "\n";
         
         // Read the data back
         $req = &new HTTP_Request2( $url );
         $response = $req->send();
 		if( $response->getStatus() > 399 ) {
-			PHPUnit_Framework_Assert::assertTrue( false, "HTTP status " . $req->getStatus() );
+			PHPUnit_Framework_Assert::assertTrue( false, 'HTTP status ' . $req->getStatus() );
 		}
         $content = $response->getBody();
-        echo "content: " . $content;
-		PHPUnit_Framework_Assert::assertEquals( "Four score and twenty years ago", $content, "object content wrong" );						
+        echo 'content: ' . $content;
+		PHPUnit_Framework_Assert::assertEquals( 'Four score and twenty years ago', $content, 'object content wrong' );
     }
     
     	/**
@@ -1004,10 +1004,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetAllMetadata() {
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2 foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2 bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2 foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2 bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -1021,25 +1021,25 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read and validate the metadata
 		list ($meta,$newacl) = $this->esu->getAllMetadata( $id );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "foo2 foo2", $meta->getMetadata( "listable2" )->getValue(), "value of 'listable2' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar2 bar2", $meta->getMetadata( "unlistable2" )->getValue(), "value of 'unlistable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo2 foo2', $meta->getMetadata( 'listable2' )->getValue(), "value of 'listable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar2 bar2', $meta->getMetadata( 'unlistable2' )->getValue(), "value of 'unlistable2' wrong" );
 		PHPUnit_Framework_Assert::assertEquals( $acl, $newacl, "ACLs don't match" );
 	}
 	
 	public function testChecksum() {
-		$data = "hello world";
-		$ck = new Checksum( "SHA0" );
+		$data = 'hello world';
+		$ck = new Checksum( 'SHA0' );
 		$ck->update( $data );
-		PHPUnit_Framework_Assert::assertEquals( "SHA0/11/9fce82c34887c1953b40b3a2883e18850c4fa8a6", "$ck", "value of 'checksum' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'SHA0/11/9fce82c34887c1953b40b3a2883e18850c4fa8a6', "$ck", "value of 'checksum' wrong" );
 	}
 	
 	public function testCreateChecksum() {
-		$ck = new Checksum( "SHA0" );
-		$id = $this->esu->createObject( null, null, "hello", "text/plain", $ck );
+		$ck = new Checksum( 'SHA0' );
+		$id = $this->esu->createObject( null, null, 'hello', 'text/plain', $ck );
 		$this->cleanup[] = $id;
-		PHPUnit_Framework_Assert::assertTrue( strlen("".$ck) > 0, "Checksum is empty" );
+		PHPUnit_Framework_Assert::assertTrue( strlen(''.$ck) > 0, 'Checksum is empty' );
 	}
 
 	/**
@@ -1049,21 +1049,21 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testReadChecksum()
 	{
-		$ck = new Checksum( "SHA0" );
+		$ck = new Checksum( 'SHA0' );
 		$mlist = new MetadataList();
-		$meta = new Metadata( "policy", "erasure", false );
+		$meta = new Metadata( 'policy', 'erasure', false );
 		$mlist->addMetadata( $meta );
-		$id = $this->esu->createObject(null, $mlist, "Four score and seven years ago", "text/plain", $ck);
+		$id = $this->esu->createObject(null, $mlist, 'Four score and seven years ago', 'text/plain', $ck);
 		$this->cleanup[] = $id;
-		PHPUnit_Framework_Assert::assertTrue( strlen("".$ck) > 0, "Checksum is empty" );
+		PHPUnit_Framework_Assert::assertTrue( strlen(''.$ck) > 0, 'Checksum is empty' );
 		
 		// Read back.
-		$ck2 = new Checksum( "SHA0" );
+		$ck2 = new Checksum( 'SHA0' );
 		$content = $this->esu->ReadObject($id, null, null, $ck2);
-		PHPUnit_Framework_Assert::assertEquals("Four score and seven years ago", $content, "object content wrong");
+		PHPUnit_Framework_Assert::assertEquals('Four score and seven years ago', $content, 'object content wrong');
 		if( $ck2->getExpectedValue() != null ) {
-			PHPUnit_Framework_Assert::assertEquals( "".$ck, "".$ck2, "object checksum wrong");
-			PHPUnit_Framework_Assert::assertEquals( $ck2->getExpectedValue(), "".$ck2, "expected checksum wrong");
+			PHPUnit_Framework_Assert::assertEquals( ''.$ck, ''.$ck2, 'object checksum wrong');
+			PHPUnit_Framework_Assert::assertEquals( $ck2->getExpectedValue(), ''.$ck2, 'expected checksum wrong');
 		}
 	}
 	
@@ -1079,14 +1079,14 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		$uploadHelper->setComputeChecksums( true );
 
 		$mlist = new MetadataList();
-		$meta = new Metadata( "policy", "erasure", false );
+		$meta = new Metadata( 'policy', 'erasure', false );
 		$mlist->addMetadata( $meta );
-		$ck = new Checksum( "SHA0" );
+		$ck = new Checksum( 'SHA0' );
 		
 		// update the object contents
 		$tempFile = tmpfile();
 		for( $i = 0; $i<200000; $i++ ) {
-			fprintf( $tempFile, "hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello\n" );	
+			fprintf( $tempFile, 'hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello\n' );
 		}
 		fseek( $tempFile, 0 );
 		
@@ -1116,10 +1116,10 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testNormalizeSpace() {
 		$mlist = new MetadataList();
-		$listable = new Metadata( "listable", "foo", true );
-		$unlistable = new Metadata( "unlistable", "bar", false );
-		$listable2 = new Metadata( "listable2", "foo2   foo2", true );
-		$unlistable2 = new Metadata( "unlistable2", "bar2      bar2", false );
+		$listable = new Metadata( 'listable', 'foo', true );
+		$unlistable = new Metadata( 'unlistable', 'bar', false );
+		$listable2 = new Metadata( 'listable2', 'foo2   foo2', true );
+		$unlistable2 = new Metadata( 'unlistable2', 'bar2      bar2', false );
 		$mlist->addMetadata( $listable );
 		$mlist->addMetadata( $unlistable );
 		$mlist->addMetadata( $listable2 );
@@ -1130,20 +1130,20 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 		
 		// Read and validate the metadata
 		$meta = $this->esu->getUserMetadata( $id, null );
-		PHPUnit_Framework_Assert::assertEquals( "foo", $meta->getMetadata( "listable" )->getValue(), "value of 'listable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "foo2   foo2", $meta->getMetadata( "listable2" )->getValue(), "value of 'listable2' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar", $meta->getMetadata( "unlistable" )->getValue(), "value of 'unlistable' wrong" );
-		PHPUnit_Framework_Assert::assertEquals( "bar2      bar2", $meta->getMetadata( "unlistable2" )->getValue(), "value of 'unlistable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo', $meta->getMetadata( 'listable' )->getValue(), "value of 'listable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'foo2   foo2', $meta->getMetadata( 'listable2' )->getValue(), "value of 'listable2' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar', $meta->getMetadata( 'unlistable' )->getValue(), "value of 'unlistable' wrong" );
+		PHPUnit_Framework_Assert::assertEquals( 'bar2      bar2', $meta->getMetadata( 'unlistable2' )->getValue(), "value of 'unlistable2' wrong" );
 		
 	}
 	
 	public function testRename() {
-		$op1 = new ObjectPath("/" . $this->random8() . ".tmp");
-		$op2 = new ObjectPath("/" . $this->random8() . ".tmp");
-		$op3 = new ObjectPath("/" . $this->random8() . ".tmp");
-		$op4 = new ObjectPath("/" . $this->random8() . ".tmp");
-		$id = $this->esu->createObjectOnPath($op1, null, null, "Four score and seven years ago", "text/plain");
-		PHPUnit_Framework_Assert::assertNotNull($id, "null ID returned");
+		$op1 = new ObjectPath('/' . $this->random8() . '.tmp');
+		$op2 = new ObjectPath('/' . $this->random8() . '.tmp');
+		$op3 = new ObjectPath('/' . $this->random8() . '.tmp');
+		$op4 = new ObjectPath('/' . $this->random8() . '.tmp');
+		$id = $this->esu->createObjectOnPath($op1, null, null, 'Four score and seven years ago', 'text/plain');
+		PHPUnit_Framework_Assert::assertNotNull($id, 'null ID returned');
 		$this->cleanup[] = $id;
 
 		// Rename the object
@@ -1151,14 +1151,14 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 
 		// Read back the content
 		$content = $this->esu->readObject($op2, null, null);
-		PHPUnit_Framework_Assert::assertEquals("Four score and seven years ago", $content, "object content wrong");
+		PHPUnit_Framework_Assert::assertEquals('Four score and seven years ago', $content, 'object content wrong');
 
 		// Attempt overwrite
-		$id = $this->esu->createObjectOnPath($op3, null, null, "Four score and seven years ago", "text/plain");
-		PHPUnit_Framework_Assert::assertNotNull(id, "null ID returned");
+		$id = $this->esu->createObjectOnPath($op3, null, null, 'Four score and seven years ago', 'text/plain');
+		PHPUnit_Framework_Assert::assertNotNull(id, 'null ID returned');
 		$this->cleanup[] = $id;
-		$id = $this->esu->createObjectOnPath($op4, null, null, "You shouldn't see me", "text/plain");
-		PHPUnit_Framework_Assert::assertNotNull(id, "null ID returned");
+		$id = $this->esu->createObjectOnPath($op4, null, null, "You shouldn't see me", 'text/plain');
+		PHPUnit_Framework_Assert::assertNotNull(id, 'null ID returned');
 		$this->cleanup[] = $id;
 		$this->esu->rename($op3, $op4, true);
 
@@ -1167,42 +1167,42 @@ class EsuRestApiTest extends PHPUnit_Framework_TestCase {
 
 		// Read back the content
 		$content = $this->esu->readObject($op4, null, null);
-		PHPUnit_Framework_Assert::assertEquals("Four score and seven years ago", $content, "object content wrong (3)");
+		PHPUnit_Framework_Assert::assertEquals('Four score and seven years ago', $content, 'object content wrong (3)');
 	}
 	
 	public function testGetServiceInformation() {
 		$si = $this->esu->getServiceInformation();
 		
-		PHPUnit_Framework_Assert::assertNotNull( $si->getAtmosVersion(), "Atmos version null" );
+		PHPUnit_Framework_Assert::assertNotNull( $si->getAtmosVersion(), 'Atmos version null' );
 	}
 	
 	public function testGetObjectInfo() {
 		$mlist = new MetadataList();
-		$meta = new Metadata( "policy", "retaindelete", false );
+		$meta = new Metadata( 'policy', 'retaindelete', false );
 		$mlist->addMetadata( $meta );
-		$id = $this->esu->createObject(null, $mlist, "Four score and seven years ago", "text/plain");
+		$id = $this->esu->createObject(null, $mlist, 'Four score and seven years ago', 'text/plain');
 		$this->cleanup[] = $id;
 		
-		$info = $this->esu->getObjectInfo($id);
-		PHPUnit_Framework_Assert::assertNotNull( $info->objectId, "Object info ID null" );
-		PHPUnit_Framework_Assert::assertNotNull( $info->selection, "Object info ID null" );
-		PHPUnit_Framework_Assert::assertNotNull( $info->expiration, "Object info ID null" );
-		PHPUnit_Framework_Assert::assertNotNull( $info->retention, "Object info ID null" );
-		PHPUnit_Framework_Assert::assertNotNull( $info->replicas, "Object info ID null" );
-		PHPUnit_Framework_Assert::assertTrue( count($info->replicas)>0, "No replicas in replica array" );
+		$info = $this->esu->getObjectInformation($id);
+		PHPUnit_Framework_Assert::assertNotNull( $info->objectId, 'Object info ID null' );
+		PHPUnit_Framework_Assert::assertNotNull( $info->selection, 'Object info ID null' );
+		PHPUnit_Framework_Assert::assertNotNull( $info->expiration, 'Object info ID null' );
+		PHPUnit_Framework_Assert::assertNotNull( $info->retention, 'Object info ID null' );
+		PHPUnit_Framework_Assert::assertNotNull( $info->replicas, 'Object info ID null' );
+		PHPUnit_Framework_Assert::assertTrue( count($info->replicas)>0, 'No replicas in replica array' );
 		if( count($info->replicas) > 1 ) {
-			PHPUnit_Framework_Assert::assertTrue( $info->replicas[0]->id != $info->replicas[1]->id, "Replica IDs equal" );
+			PHPUnit_Framework_Assert::assertTrue( $info->replicas[0]->id != $info->replicas[1]->id, 'Replica IDs equal' );
 		}
 	}
 
 	
 	private function directoryContains( $dirList, $op ) {
-		print "Looking for: " . $op . "\n";
+		print 'Looking for: ' . $op . "\n";
 		
 		for( $i=0; $i<count($dirList); $i++ ) {
 			$entry = $dirList[$i];
 			print $entry->getPath() . "\n";
-			if( "".$entry->getPath() == "".$op  ) {
+			if( ''.$entry->getPath() == ''.$op  ) {
 				return true;
 			}
 		}

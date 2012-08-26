@@ -6,7 +6,7 @@
  * @package		Storage
  * @category	Tests
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011 Micheal Morgan
+ * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
 abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
@@ -101,7 +101,7 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 		
 		// Create file
 		$storage->set($path, $content);
-		
+
 		// Use Request to get content and headers
 		$response = Request::factory($storage->url($path))->execute();
 		

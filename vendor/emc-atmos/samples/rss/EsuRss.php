@@ -55,7 +55,7 @@ $link .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
 $link .= substr( $_SERVER["REQUEST_URI"], 0, strpos( $_SERVER["REQUEST_URI"], "EsuRss.php" ) ); 
 
 // Get collection name
-$parts = split( "/", $tag );
+$parts = explode( '/', $tag );
 
 $channelName = $parts[ count($parts)-1 ];
 
