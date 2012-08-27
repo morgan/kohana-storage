@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Local file system driver for Storage Module
+ * Listing abstract
  * 
  * @package		Storage
  * @category	Base
@@ -8,4 +8,4 @@
  * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
-class Storage_Connection_Local extends Kohana_Storage_Connection_Local {}
+abstract class Storage_Listing_Abstract extends Kohana_Storage_Listing_Abstract {}

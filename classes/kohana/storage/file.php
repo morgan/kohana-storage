@@ -5,10 +5,10 @@
  * @package		Storage
  * @category	Base
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011 Micheal Morgan
+ * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_File extends Storage_Listing
+class Kohana_Storage_File extends Storage_Listing_Abstract
 {
 	/**
 	 * Extension
