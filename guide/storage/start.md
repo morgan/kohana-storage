@@ -75,3 +75,23 @@ Content can simply be passed in.
 
 	// Outputs "http://localhost/test.txt"
 	echo $storage->url('test.txt');
+
+## Directory listing
+
+	// Instance of `Storage_Directory`
+	$directory = $storage->listing('path/to/directory');
+
+	// Comprised of `Storage_File` and `Storage_Directory` objects 
+	foreach ($directory as $listing)
+	{
+		if ($listing->is_file())
+		{
+			echo $listing->name(), $listing->modified(), $listing->mime(), $listing->size();
+		}
+		else if ($listing->is_directory())
+		{
+			// We can also iterate over this `$listing` object because it is an 
+			// instance of `Storage_Directory`
+			echo $listing->name();
+		}
+	}
