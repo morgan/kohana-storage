@@ -1,6 +1,7 @@
 # Storage Module
 
-A key/value storage abstraction supporting Amazon S3, Rackspace Cloud Files, EMC Atmos, FTP and the local file system.
+A key/value storage abstraction supporting Amazon S3, Rackspace Cloud Files, EMC Atmos, FTP and the 
+local file system.
 
 ## Getting Started
 
