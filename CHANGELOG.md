@@ -1,9 +1,9 @@
 # 0.4.0
 
 - Added directory listing support
-- Renamed `Storage` to `Storage_Connection`
-- `Storage` now helpers for working with default connection
 - Added `Storage_File` for performing actions on single path
+- Renamed `Storage` to `Storage_Connection`
+- `Storage::factory` returns `Storage_Connection` and is backwards compatible with prior versions
 - Updated AWS SDK to 1.5.13
 - Updated EMC Atmos SDK to 1.4.1.21
 - Updated Rackspace Cloud Files SDK to latest

@@ -42,10 +42,9 @@
 	// OPTIONAL - Determines which Cerificate Authority file to use. A value of boolean `false` 
 	// will use the Certificate Authority file available on the system. A value of boolean 
 	// `true` will use the Certificate Authority provided by the SDK. Passing a file system path to 
-	// a Certificate Authority file (chmodded to `0755`) will use that. Leave this set 
-	// to `false` if you're not sure.
+	// a Certificate Authority file (chmodded to `0755`) will use that.
 	// @link https://github.com/amazonwebservices/aws-sdk-for-php/blob/2a67bf8302f00141eca8b39f5f381dcfbb0d10e6/sdk.class.php#L374
-	$config['s3']['certificate_authority']	= FALSE;
+	$config['s3']['certificate_authority']	= TRUE;
 
 	/**
 	 * EMC Atmos

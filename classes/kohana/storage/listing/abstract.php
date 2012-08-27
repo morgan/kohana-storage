@@ -164,7 +164,7 @@ abstract class Kohana_Storage_Listing_Abstract
 	{
 		if (NULL === $connection = $this->_connection)
 		{
-			$connection = Storage::connection();
+			$connection = Storage_Connection::factory();
 		}
 		
 		if ($connection === NULL)
