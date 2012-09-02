@@ -1,7 +1,7 @@
-# 0.4.0
+# 0.4.0 - 09/01/2012
 
 - Added directory listing support
-- Added `Storage_File` for performing actions on single path
+- Added `Storage_File` for performing actions on a single path
 - Renamed `Storage` to `Storage_Connection`
 - `Storage::factory` returns `Storage_Connection` and is backwards compatible with prior versions
 - Updated AWS SDK to 1.5.13

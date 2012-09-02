@@ -63,7 +63,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 			if ($this->_config['username'] !== NULL && $this->_config['password'] !== NULL)
 			{
 				if ( ! ftp_login($this->_connection, $this->_config['username'], $this->_config['password']))
-					throw new Kohana_Exception('Storage FTP driver failed to authenticate.');
+					throw new Storage_Exception('Storage FTP driver failed to authenticate.');
 			}
 				
 			if ($this->_config['passive'])
