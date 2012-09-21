@@ -32,11 +32,11 @@ class Kohana_Storage_Connection_FtpTest extends Kohana_Storage_ConnectionTest
     /**
      * Factory using FTP configuration
      * 
-     * @access	public
-     * @return	Storage_Ftp
+     * @access  public
+     * @return  Storage_Ftp
      */
     public function factory()
     {
-    	return Storage_Connection::factory('ftp');
+        return Storage_Connection::factory('ftp');
     }
 }

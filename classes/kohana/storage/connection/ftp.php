@@ -24,7 +24,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		'url'		=> NULL,
 		'port'		=> 21,
 		'timeout'	=> 90,
-		'passive'	=> FALSE,
+		'passive'	=> TRUE,
 		'ssl'		=> TRUE,
 		'transfer'	=> FTP_BINARY
 	);
@@ -55,7 +55,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 	{
 		if ($this->_connection === NULL)
 		{
-			$call = $this->_config['ssl'] ? 'ftp_connect' : 'ftp_ssl_connect';
+			$call = $this->_config['ssl'] ? 'ftp_ssl_connect' : 'ftp_connect';
 			
 			if ( ! $this->_connection = $call($this->_config['host'], $this->_config['port'], $this->_config['timeout']))
 				throw new Storage_Exception('Storage_Connection_FTP unable to establish connection.');

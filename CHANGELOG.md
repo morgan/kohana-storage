@@ -1,3 +1,9 @@
+# 0.5.0
+
+- Resolved issue #4 (https://github.com/morgan/kohana-storage/issues/4). The issue was that the 
+SSL configuration implementation in `Storage_Connection_Ftp::_load` was inverted.
+- All tests pass
+
 # 0.4.0 - 09/01/2012
 
 - Added directory listing support
@@ -7,7 +13,7 @@
 - Updated AWS SDK to 1.5.13
 - Updated EMC Atmos SDK to 1.4.1.21
 - Updated Rackspace Cloud Files SDK to latest
-- All tests pass: OK (34 tests, 69 assertions)
+- All tests pass: "OK (34 tests, 69 assertions)"
 
 # 0.3.0 - 10/18/2011
 
