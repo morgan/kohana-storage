@@ -43,8 +43,13 @@
 	// will use the Certificate Authority file available on the system. A value of boolean 
 	// `true` will use the Certificate Authority provided by the SDK. Passing a file system path to 
 	// a Certificate Authority file (chmodded to `0755`) will use that.
-	// @link https://github.com/amazonwebservices/aws-sdk-for-php/blob/2a67bf8302f00141eca8b39f5f381dcfbb0d10e6/sdk.class.php#L374
+	// @link 	https://github.com/amazonwebservices/aws-sdk-for-php/blob/2a67bf8302f00141eca8b39f5f381dcfbb0d10e6/sdk.class.php#L374
 	$config['s3']['certificate_authority']	= TRUE;
+
+	// OPTIONAL - Enables the use of the older path-style URI access for all requests (e.g. the DNS vs. Path-style setting)
+	// @link	https://forums.aws.amazon.com/message.jspa?messageID=308155#308155
+	// @link	https://forums.aws.amazon.com/thread.jspa?threadID=69108
+	$config['s3']['path_style']				= FALSE;
 
 	/**
 	 * EMC Atmos
@@ -127,7 +132,7 @@
 	$config['ftp']['passive']	= FALSE;
 	
 	// OPTIONAL - Boolean, whether or not to use SSL connection
-	$config['ftp']['ssl']		= TRUE;
+	$config['ftp']['ssl']		= FALSE;
 	
 	// OPTIONAL - The transfer mode: `FTP_BINARY` or `FTP_ASCII`
 	$config['ftp']['transfer']	= FTP_BINARY;

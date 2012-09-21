@@ -27,6 +27,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 		'cname'					=> NULL,
 		'public'				=> FALSE,		
 		'preauth'				=> 30,
+		'path_style'			=> FALSE,
 		'certificate_authority'	=> FALSE
 	);
 	
@@ -60,6 +61,8 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 
 			$this->_driver = new AmazonS3(Arr::extract($this->_config, 
 				array('key', 'secret', 'certificate_authority')));
+
+			$this->_driver->enable_path_style($this->_config['path_style']);
 		}
 		
 		return $this->_driver;

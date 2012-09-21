@@ -1,11 +1,13 @@
-# 0.5.0
+# 0.5.0 - 09/21/2012
 
 - Resolved issue #4 (https://github.com/morgan/kohana-storage/issues/4). The issue was that the 
 SSL configuration implementation in `Storage_Connection_Ftp::_load` was inverted.
 - Resolved issue #5 (https://github.com/morgan/kohana-storage/issues/5). Problem was 
 `ErrorException` was thrown due to pass by reference issue in 
 `classes/storage/listing/abstract.php#L127`.
-- All tests pass
+- Resolved issue #6 (https://github.com/morgan/kohana-storage/issues/6). This adds configuration 
+option `path_style` to S3 driver allowing for older path-style URI access for all requests.
+- All tests pass: "OK (34 tests, 69 assertions)"
 
 # 0.4.0 - 09/01/2012
 
