@@ -124,7 +124,9 @@ abstract class Kohana_Storage_Listing_Abstract
 		{
 			if ($this->_path)
 			{
-				$this->_name = end(explode(Storage::DELIMITER, $this->_path));
+				$segments = explode(Storage::DELIMITER, $this->_path);
+
+				$this->_name = end($segments);
 			}
 
 			$this->_name = ($this->_name) ?: NULL;

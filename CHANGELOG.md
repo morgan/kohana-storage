@@ -2,6 +2,9 @@
 
 - Resolved issue #4 (https://github.com/morgan/kohana-storage/issues/4). The issue was that the 
 SSL configuration implementation in `Storage_Connection_Ftp::_load` was inverted.
+- Resolved issue #5 (https://github.com/morgan/kohana-storage/issues/5). Problem was 
+`ErrorException` was thrown due to pass by reference issue in 
+`classes/storage/listing/abstract.php#L127`.
 - All tests pass
 
 # 0.4.0 - 09/01/2012
