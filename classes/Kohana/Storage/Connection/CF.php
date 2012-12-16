@@ -212,8 +212,10 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 		{
 			if ($item instanceof CF_Object)
 			{
-				$name = end(explode(Storage::DELIMITER, $item->name));
-			
+				$segments = explode(Storage::DELIMITER, $item->name);
+
+				$name = end($segments);
+				
 				$object = Storage_File::factory($path . Storage::DELIMITER . $name, $this)
 					->size($item->content_length)
 					->modified(strtotime($item->last_modified));
@@ -222,7 +224,9 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 			}
 			else if (isset($item['subdir']))
 			{
-				$_path = $path . Storage::DELIMITER . end(explode(Storage::DELIMITER, trim($item['subdir'], Storage::DELIMITER)));
+				$segments = explode(Storage::DELIMITER, trim($item['subdir'], Storage::DELIMITER));
+
+				$_path = $path . Storage::DELIMITER . end($segments);
 				
 				$listing->set(Storage_Directory::factory($_path, $this));
 			}

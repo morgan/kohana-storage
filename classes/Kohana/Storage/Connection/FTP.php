@@ -215,7 +215,9 @@ class Kohana_Storage_Connection_FTP extends Storage_Connection
 
 			$_path = $path . Storage::DELIMITER . $name;
 			
-			$type = end(explode('=', $item[0]));
+			$segments = explode('=', $item[0]);
+
+			$type = end($segments);
 			
 			if ($type == 'dir')
 			{
@@ -223,9 +225,13 @@ class Kohana_Storage_Connection_FTP extends Storage_Connection
 			}
 			else if ($type == 'file')
 			{
+				$size = explode('=', $item[1]);
+
+				$modified = explode('=', $item[2]);
+
 				$object = Storage_File::factory($_path, $this)
-					->size(end(explode('=', $item[1])))
-					->modified(strtotime(end(explode('=', $item[2]))));
+					->size(end($size))
+					->modified(strtotime(end($modified)));
 			}
 			else
 				throw new Storage_Exception('Unkown type: ' . $type);

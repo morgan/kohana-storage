@@ -2,7 +2,8 @@
 
 - Upgraded to support Kohana 3.3
 - Renamed class files and directories to support PSR-0
-- All tests pass: ""
+- Resolved pass by reference issue (now testing in strict mode)
+- All tests pass: "OK (34 tests, 69 assertions)"
 
 # 0.5.0 - 09/21/2012
 
