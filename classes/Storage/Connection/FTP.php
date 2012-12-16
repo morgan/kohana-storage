@@ -8,4 +8,4 @@
  * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
-class Storage_Connection_Ftp extends Kohana_Storage_Connection_Ftp {}
+class Storage_Connection_Ftp extends Kohana_Storage_Connection_FTP {}

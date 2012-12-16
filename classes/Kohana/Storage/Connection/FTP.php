@@ -8,10 +8,10 @@
  * @copyright	(c) 2011-2012 Micheal Morgan
  * @license		MIT
  */
-class Kohana_Storage_Connection_Ftp extends Storage_Connection
-{	
+class Kohana_Storage_Connection_FTP extends Storage_Connection
+{
 	/**
-	 * Default config
+	 * Default config2
 	 * 
 	 * @access	protected
 	 * @var		array
@@ -65,14 +65,14 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 				if ( ! ftp_login($this->_connection, $this->_config['username'], $this->_config['password']))
 					throw new Storage_Exception('Storage FTP driver failed to authenticate.');
 			}
-				
+			
 			if ($this->_config['passive'])
 			{
 				ftp_pasv($this->_connection, TRUE);	
 			}
-				
+			
 			$this->_origin = ftp_pwd($this->_connection);
-		}	
+		}
 		
 		return $this->_connection;
 	}
@@ -89,7 +89,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		{
 			ftp_close($this->_connection);
 		}
-	}	
+	}
    
 	/**
 	 * Set
@@ -122,7 +122,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		$this->_load();
 		
 		return ftp_fget($this->_connection, $handle, $path, $this->_config['transfer']);
-	}	
+	}
 	
 	/**
 	 * Delete
@@ -136,7 +136,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		$this->_load();
 
 		return ftp_delete($this->_connection, $path);
-	}			
+	}
 	
 	/**
 	 * Size
@@ -187,7 +187,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		if ( ! $this->_config['url'])
 			return FALSE;
 			
-		return $protocol . '://' . $this->_config['url'] . $path;	
+		return $protocol . '://' . $this->_config['url'] . $path;
 	}
 	
 	/**
@@ -207,8 +207,8 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		{
 			if ($name[0] === '.' OR $name[strlen($name) - 1] === '~')
 				continue;
-				
-			$item = ftp_raw($this->_connection, 'MLST ' . $name);	
+			
+			$item = ftp_raw($this->_connection, 'MLST ' . $name);
 			$item = explode(';', $item[1]);
 			
 			$name = trim($item[7]);
@@ -229,14 +229,14 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 			}
 			else
 				throw new Storage_Exception('Unkown type: ' . $type);
-				
+			
 			$listing->set($object);
 		}
 
 		ftp_chdir($this->_connection, $this->_origin);
 		
 		return $listing;
-	}	
+	}
 	
 	/**
 	 * Create directory based on current location
@@ -249,7 +249,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 	{
 		$result = TRUE;
 
-		$segments = explode(Storage::DELIMITER, $path);		
+		$segments = explode(Storage::DELIMITER, $path);
 		
 		$path = '';
 		
@@ -265,7 +265,7 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 			if ( ! @ftp_chdir($this->_connection, $path))
 			{
 				ftp_chdir($this->_connection, Storage::DELIMITER);
-	
+				
 				if ( ! ftp_mkdir($this->_connection, $path))
 				{
 					$result = FALSE;
@@ -276,5 +276,5 @@ class Kohana_Storage_Connection_Ftp extends Storage_Connection
 		ftp_chdir($this->_connection, $this->_origin);
 		
 		return $result;
-	}	
+	}
 }

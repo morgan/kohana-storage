@@ -36,7 +36,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 	 */
 	protected function _set($path, $handle, $mime)
 	{
-		$this->_create_directory($path);		
+		$this->_create_directory($path);
 		
 		$path = $this->_config['root_path'] . $path;
 
@@ -62,7 +62,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 			return (bool) stream_copy_to_stream($source, $handle);
 		else
 			return FALSE;
-	}	
+	}
 	
 	/**
 	 * Delete
@@ -74,7 +74,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 	protected function _delete($path)
 	{
 		return unlink($this->_config['root_path'] . $path);
-	}	
+	}
 	
 	/**
 	 * Size
@@ -86,7 +86,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 	protected function _size($path)
 	{
 		return (int) @filesize($this->_config['root_path'] . $path);
-	}	
+	}
 	
 	/**
 	 * Whether or not file exists
@@ -138,8 +138,8 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 			if ($name[0] === '.' OR $name[strlen($name) - 1] === '~')
 				continue;
 
-			$_path = $path . Storage::DELIMITER . $name;	
-				
+			$_path = $path . Storage::DELIMITER . $name;
+			
 			if ($item->isFile())
 			{
 				$object = Storage_File::factory($_path, $this)
@@ -155,7 +155,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 		}
 		
 		return $listing;
-	}	
+	}
 	
 	/**
 	 * Create directory based on current location
@@ -168,7 +168,7 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 	{
 		$result = TRUE;
 
-		$segments = explode('/', $path);		
+		$segments = explode('/', $path);
 		
 		$path = $this->_config['root_path'];
 
@@ -191,5 +191,5 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 		}
 
 		return $result;
-	}	
+	}
 }

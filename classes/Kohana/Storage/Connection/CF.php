@@ -47,8 +47,8 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 	{
 		if ($this->_container === NULL)
 		{
-			require_once Kohana::find_file('vendor', 'rs-cf/cloudfiles');				
-				
+			require_once Kohana::find_file('vendor', 'rs-cf/cloudfiles');
+			
 			$auth = new CF_Authentication($this->_config['username'], $this->_config['api_key']);
 			$auth->authenticate();
 			
@@ -66,11 +66,11 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 				{
 					$this->_container->make_public();
 				}
-			}			
+			}
 		}
 
 		return $this->_container;
-	}	
+	}
 	
 	/**
 	 * Set
@@ -111,12 +111,12 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 			}
 			catch (Exception $e)
 			{
-				return FALSE;	
+				return FALSE;
 			}
 		}
 		
 		return FALSE;
-	}	
+	}
 	
 	/**
 	 * Delete
@@ -155,7 +155,7 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 			return $object->content_length;
 		else
 			return 0;
-	}	
+	}
 	
 	/**
 	 * Whether or not file exists
@@ -188,12 +188,12 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 				if ($protocol == 'https')
 					return $object->public_ssl_uri();
 				else
-					return $object->public_uri();	
+					return $object->public_uri();
 			}
 		}
 		
 		return NULL;
-	}	
+	}
 	
 	/**
 	 * Get listing
@@ -217,7 +217,7 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 				$object = Storage_File::factory($path . Storage::DELIMITER . $name, $this)
 					->size($item->content_length)
 					->modified(strtotime($item->last_modified));
-					
+				
 				$listing->set($object);
 			}
 			else if (isset($item['subdir']))
@@ -229,7 +229,7 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 		}
 		
 		return $listing;
-	}	
+	}
 	
 	/**
 	 * Get Clould Files object
@@ -240,7 +240,7 @@ class Kohana_Storage_Connection_Cf extends Storage_Connection
 	 * @return	CF_Object|bool
 	 */
 	protected function _get_object($path, $create = FALSE)
-	{		
+	{
 		$this->_load();
 
 		try 

@@ -9,7 +9,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_Atmos extends Storage_Connection
-{	
+{
 	/**
 	 * Default config
 	 * 
@@ -31,7 +31,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 	 * @access	protected
 	 * @var		EsuRestApi
 	 */
-	protected $_connection;	
+	protected $_connection;
 
 	/**
 	 * Upload Helper
@@ -47,7 +47,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 	 * @access	protected
 	 * @var		DownloadHelper
 	 */
-	protected $_download_helper;	
+	protected $_download_helper;
 	
 	/**
 	 * Load connection
@@ -59,13 +59,19 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 	{
 		if ($this->_connection === NULL)
 		{
-			require_once Kohana::find_file('vendor', 'emc-atmos/src/EsuRestApi');				
+			require_once Kohana::find_file('vendor', 'emc-atmos/src/EsuRestApi');
 
-			$this->_connection = new EsuRestApi($this->_config['host'], $this->_config['port'], $this->_config['subtenant_id'] . '/' . $this->_config['uid'], $this->_config['secret']);
+			$this->_connection = new EsuRestApi
+			(
+				$this->_config['host'], 
+				$this->_config['port'], 
+				$this->_config['subtenant_id'] . '/' . $this->_config['uid'], 
+				$this->_config['secret']
+			);
 		}
 		
 		return $this->_connection;
-	}	
+	}
 	
 	/**
 	 * Set
@@ -86,7 +92,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 			
 			if ($helper->createObjectFromStreamOnPath($path, $handle) === NULL)
 			{
-				$helper->updateObjectFromStream($path, $handle);	
+				$helper->updateObjectFromStream($path, $handle);
 			}
 			
 			return TRUE;
@@ -117,7 +123,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 		{
 			return FALSE;
 		}
-	}		
+	}
 	
 	/**
 	 * Delete
@@ -151,13 +157,16 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 	{
 		try
 		{
-			return (int) $this->_connection->getSystemMetadata($path)->getMetadata('size')->getValue();
+			return (int) $this->_connection
+				->getSystemMetadata($path)
+				->getMetadata('size')
+				->getValue();
 		}
 		catch (Exception $e)
 		{
 			return 0;
 		}
-	}	
+	}
 	
 	/**
 	 * Whether or not file exists
@@ -210,7 +219,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 				$replace = $protocol . '://' . $this->_config['host'] . ':' . $port;
 				
 				$url = str_replace($esu['accessScheme'], $replace, $url);
-			}			
+			}
 		}
 		catch (Exception $e) 
 		{
@@ -240,7 +249,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 				$listing->set(Storage_Directory::factory($_path, $this));
 			}
 			else
-			{				
+			{
 				$meta = $this->_connection->getSystemMetadata($this->_filter_path($_path));
 
 				$file = Storage_File::factory($_path, $this)
@@ -266,7 +275,7 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 		$this->_load();
 		
 		return new ObjectPath('/' . parent::_filter_path($path));
-	}	
+	}
 	
 	/**
 	 * Get Download Helper
@@ -306,5 +315,5 @@ class Kohana_Storage_Connection_Atmos extends Storage_Connection
 		}
 		
 		return $this->_upload_helper;
-	}	
+	}
 }
