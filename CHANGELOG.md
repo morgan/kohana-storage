@@ -1,3 +1,9 @@
+# 0.6.0 - 12/16/2012
+
+- Upgraded to support Kohana 3.3
+- Renamed class files and directories to support PSR-0
+- All tests pass: ""
+
 # 0.5.0 - 09/21/2012
 
 - Resolved issue #4 (https://github.com/morgan/kohana-storage/issues/4). The issue was that the 
