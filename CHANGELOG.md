@@ -1,4 +1,4 @@
-# 0.6.0 - 12/16/2012
+# 0.6.0 - 01/04/2013
 
 - Upgraded to support Kohana 3.3
 - Renamed class files and directories to support PSR-0
