@@ -10,7 +10,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_FtpTest extends Kohana_Storage_ConnectionTest
-{	
+{
 	/**
 	 * Verify internet and FTP has required configuration
 	 * 
@@ -18,25 +18,25 @@ class Kohana_Storage_Connection_FtpTest extends Kohana_Storage_ConnectionTest
 	 * @return	void
 	 */
 	public function setUp()
-    {
-    	parent::setUp();
-    	
-    	$config = Kohana::$config->load('storage.ftp');
-    	
-        if ( ! $this->hasInternet() || ! $config['host'] || ! $config['username'] || ! $config['password'])
-        {
-            $this->markTestSkipped('Storage FTP driver is not configured.');
-        }
-    }
-    
-    /**
-     * Factory using FTP configuration
-     * 
-     * @access  public
-     * @return  Storage_Ftp
-     */
-    public function factory()
-    {
-        return Storage_Connection::factory('ftp');
-    }
+	{
+		parent::setUp();
+
+		$config = Kohana::$config->load('storage.ftp');
+
+		if ( ! $this->hasInternet() OR ! $config['host'] OR ! $config['username'] OR ! $config['password'])
+		{
+			$this->markTestSkipped('Storage FTP driver is not configured.');
+		}
+	}
+
+	/**
+	 * Factory using FTP configuration
+	 * 
+	 * @access  public
+	 * @return  Storage_Ftp
+	 */
+	public function factory()
+	{
+		return Storage_Connection::factory('ftp');
+	}
 }

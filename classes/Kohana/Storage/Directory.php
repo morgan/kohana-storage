@@ -71,7 +71,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 * @return	$this
 	 */
 	public function load()
-	{		
+	{
 		if ( ! $this->_loaded)
 		{
 			$this->_connection()->listing($this->path(), $this);
@@ -91,15 +91,15 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function directories(array $directories = NULL)
 	{
-		$this->load();		
+		$this->load();
 		
 		if ($directories === NULL)
 			return $this->_directories;
-			
+		
 		$this->_directories = $directories;
 		
 		// clear cache
-		$this->_listing = NULL;		
+		$this->_listing = NULL;
 		
 		return $this;
 	}
@@ -113,7 +113,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function files(array $files = NULL)
 	{
-		$this->load();		
+		$this->load();
 		
 		if ($files === NULL)
 			return $this->_files;
@@ -121,7 +121,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 		$this->_files = $files;
 		
 		// clear cache
-		$this->_listing = NULL;		
+		$this->_listing = NULL;
 		
 		return $this;
 	}
@@ -138,7 +138,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 		
 		if ($this->_listing === NULL)
 		{
-			$this->_listing = array_merge($this->_directories, $this->_files);	
+			$this->_listing = array_merge($this->_directories, $this->_files);
 		}
 
 		return $this->_listing;
@@ -158,7 +158,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 		
 		if ($listing instanceof Storage_Directory)
 		{
-			$this->_directories[$listing->name()] = $listing;	
+			$this->_directories[$listing->name()] = $listing;
 		}
 		else if ($listing instanceof Storage_File)
 		{
@@ -187,7 +187,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 			return $this->_listing[$name];
 		
 		return FALSE;
-	}	
+	}
 	
 	/**
 	 * Whether or not loaded
@@ -210,7 +210,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	{
 		$this->_loaded = FALSE;
 		
-		$this->_listing = NULL;		
+		$this->_listing = NULL;
 		
 		$this->_directories = $this->_files = array();
 	}
@@ -231,7 +231,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 		unset($segments[count($segments) - 1]);
 		
 		$path = implode(Storage::DELIMITER, $segments);
-	
+		
 		return Storage_Directory::factory($path, $this->_connection());
 	}
 
@@ -256,7 +256,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function current()
 	{
-		$this->as_array();		
+		$this->as_array();
 		
 		return current($this->_listing);
 	}
@@ -269,10 +269,10 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function key()
 	{
-		$this->as_array();		
+		$this->as_array();
 		
 		return key($this->_listing);
-	}	
+	}
 	
 	/**
 	 * Iterator interface
@@ -282,10 +282,10 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function next()
 	{
-		$this->as_array();		
+		$this->as_array();
 		
 		return next($this->_listing);
-	}	
+	}
 	
 	/**
 	 * Iterator interface
@@ -295,7 +295,7 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function valid()
 	{
-		$this->as_array();		
+		$this->as_array();
 		
 		return key($this->_listing) !== NULL;
 	}
@@ -308,8 +308,8 @@ class Kohana_Storage_Directory extends Storage_Listing_Abstract implements Itera
 	 */
 	public function count()
 	{
-		$this->as_array();		
+		$this->as_array();
 		
 		return count($this->_listing);
-	}	
+	}
 }

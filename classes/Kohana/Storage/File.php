@@ -24,7 +24,7 @@ class Kohana_Storage_File extends Storage_Listing_Abstract
 	 * @access	protected
 	 * @var		string
 	 */
-	protected $_size;	
+	protected $_size;
 
 	/**
 	 * Modified Time
@@ -110,11 +110,11 @@ class Kohana_Storage_File extends Storage_Listing_Abstract
 	{
 		if ($time === NULL)
 			return $this->_modified;
-			
+		
 		$this->_modified = (int) $time;
 		
 		return $this;
-	}	
+	}
 	
 	/**
 	 * Write content to storage.
@@ -141,7 +141,7 @@ class Kohana_Storage_File extends Storage_Listing_Abstract
 	public function get($handle)
 	{
 		return $this->_connection()->get($this->_path, $handle);
-	}	
+	}
 	
 	/**
 	 * Delete
@@ -154,7 +154,7 @@ class Kohana_Storage_File extends Storage_Listing_Abstract
 		$this->_connection()->delete($this->_path);
 		
 		return $this;
-	}	
+	}
 	
 	/**
 	 * Get or set size
@@ -228,5 +228,5 @@ class Kohana_Storage_File extends Storage_Listing_Abstract
 		}
 		
 		return $this;
-	}	
+	}
 }

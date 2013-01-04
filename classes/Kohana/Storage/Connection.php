@@ -2,8 +2,6 @@
 /**
  * Storage Module
  * 
- * Requires PHP 5.3+
- * 
  * @package		Storage
  * @category	Base
  * @author		Micheal Morgan <micheal@morgan.ly>
@@ -38,7 +36,7 @@ abstract class Kohana_Storage_Connection
 		$class = 'Storage_Connection_' . ucfirst(isset($config['driver']) ? $config['driver'] : $connection);
 		
 		return new $class($config);
-	}	
+	}
 	
 	/**
 	 * Config
@@ -68,7 +66,7 @@ abstract class Kohana_Storage_Connection
 	 * @param	string
 	 * @return	void
 	 */
-	abstract protected function _set($path, $handle, $mime);	
+	abstract protected function _set($path, $handle, $mime);
 	
 	/**
 	 * Read contents of file.
@@ -78,7 +76,7 @@ abstract class Kohana_Storage_Connection
 	 * @param	resource
 	 * @return	bool
 	 */
-	abstract protected function _get($path, $handle);		
+	abstract protected function _get($path, $handle);
 	
 	/**
 	 * Delete
@@ -184,14 +182,14 @@ abstract class Kohana_Storage_Connection
 		}
 
 		$result = $this->_get($this->_filter_path($path), $handle);	
-			
+		
 		if (is_resource($handle))
 		{
 			fclose($handle);
 		}
-			
+		
 		return $result;
-	}	
+	}
 	
 	/**
 	 * Delete
@@ -203,7 +201,7 @@ abstract class Kohana_Storage_Connection
 	public function delete($path)
 	{
 		return $this->_delete($this->_filter_path($path));
-	}	
+	}
 	
 	/**
 	 * File size
@@ -259,7 +257,7 @@ abstract class Kohana_Storage_Connection
 		
 		if ( ! $listing instanceof Storage_Directory)
 			throw new Storage_Exception('Storage_Connection::listing expecting instance of Storage_Directory.');
-			
+		
 		return $listing;
 	}
 	
@@ -275,5 +273,5 @@ abstract class Kohana_Storage_Connection
 		$path = $this->_config['directory'] . trim($path, '/');
 		
 		return ($path) ?: NULL;
-	}	
+	}
 }

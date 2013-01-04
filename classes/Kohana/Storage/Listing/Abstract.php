@@ -9,7 +9,7 @@
  * @license		MIT
  */
 abstract class Kohana_Storage_Listing_Abstract
-{	
+{
 	/**
 	 * Factory pattern
 	 * 
@@ -46,7 +46,7 @@ abstract class Kohana_Storage_Listing_Abstract
 	 * @access	public
 	 * @return	bool
 	 */
-	abstract public function is_directory();		
+	abstract public function is_directory();
 	
 	/**
 	 * Path
@@ -62,7 +62,7 @@ abstract class Kohana_Storage_Listing_Abstract
 	 * @access	protected
 	 * @var		mixed	bool|NULL|string
 	 */
-	protected $_name = FALSE;	
+	protected $_name = FALSE;
 	
 	/**
 	 * Connection
@@ -87,7 +87,7 @@ abstract class Kohana_Storage_Listing_Abstract
 		}
 		
 		$this->_path = $path;
-	}	
+	}
 	
 	/**
 	 * To string

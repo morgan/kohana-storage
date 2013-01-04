@@ -73,10 +73,10 @@
 	$config['atmos']['host']			= NULL;
 	$config['atmos']['uid']				= NULL;
 	$config['atmos']['subtenant_id']	= NULL;
-	$config['atmos']['secret']			= NULL;		
+	$config['atmos']['secret']			= NULL;
 	
 	// OPTIONAL - Additional connection settings
-	$config['atmos']['port']			= 443;	
+	$config['atmos']['port']			= 443;
 	
 	// OPTIONAL - Prefix path with additional pathing - be sure to include trailing slash "/"
 	// If left empty, media will be written to root.
@@ -95,11 +95,11 @@
 	$config['cf']['api_key']	= NULL;
 	
 	// REQUIRED - Container to work within - can be created under Rackspace manage - see link above
-	$config['cf']['container'] 	= NULL;	
+	$config['cf']['container'] 	= NULL;
 	
 	// OPTIONAL - If the specified container does not exist, it will be created with the following
 	// visibility.
-	$config['cf']['public']		= FALSE;		
+	$config['cf']['public']		= FALSE;
 	
 	// OPTIONAL - Prefix path with additional pathing - be sure to include trailing slash "/"
 	// If left empty, media will be written to root.
@@ -122,7 +122,7 @@
 	
 	// OPTIONAL - Prefix path with additional pathing - be sure to include trailing slash "/"
 	// If left empty, media will be written to root.
-	$config['ftp']['directory']	= NULL;	
+	$config['ftp']['directory']	= NULL;
 	
 	// OPTIONAL - Additional connection settings
 	$config['ftp']['port']		= 21;

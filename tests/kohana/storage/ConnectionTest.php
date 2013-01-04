@@ -19,14 +19,14 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 	 */
 	protected $_directory = 'kohana-storage-test';
 	
-    /**
-     * Factory to return Storage object configured for driver.
-     * 
-     * @access	public
-     * @return	Storage
-     */
-    abstract public function factory();
-    
+	/**
+	 * Factory to return Storage object configured for driver.
+	 * 
+	 * @access	public
+	 * @return	Storage
+	 */
+	abstract public function factory();
+
 	/**
 	 * Check whether or not to skip test
 	 * 
@@ -34,15 +34,15 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 	 * @return	void
 	 */
 	public function setUp()
-    {
-    	parent::setUp();
+	{
+		parent::setUp();
 
-        if ( ! Kohana::$config->load('storage.unittest.enabled'))
-        {
-            $this->markTestSkipped('Storage unit test not enabled.');
-        }
-    }  
-    
+		if ( ! Kohana::$config->load('storage.unittest.enabled'))
+		{
+			$this->markTestSkipped('Storage unit test not enabled.');
+		}
+	}  
+
 	/**
 	 * Tests object deletion
 	 * 
@@ -106,13 +106,13 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 		$response = Request::factory($storage->url($path))->execute();
 		
 		// Verify random content matches remote file
-		$this->assertEquals($content, $response->body());		
+		$this->assertEquals($content, $response->body());
 
 		// Parse mime from Content-Type header
 		$type = current(explode(';', $response->headers('Content-Type')));
 		
 		// Verify path mime matches Response
-		$this->assertEquals(Storage::mime($path), $type);		
+		$this->assertEquals(Storage::mime($path), $type);
 		
 		// Cleanup test file
 		$storage->delete($path);
@@ -186,16 +186,16 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 		$local = tempnam(sys_get_temp_dir(), 'test');
 
 		// Download to temp file
-		$this->assertEquals(TRUE, $storage->get($path, $local));		
+		$this->assertEquals(TRUE, $storage->get($path, $local));
 		
 		// Compare content
-		$this->assertEquals($content, file_get_contents($local));		
+		$this->assertEquals($content, file_get_contents($local));
 		
 		// Delete local file
 		unset($local);
 		
 		// Cleanup test file
-		$storage->delete($path);		
+		$storage->delete($path);
 	}
 
 	/**
@@ -245,7 +245,7 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 		$this->assertEquals($this->_directory, $listing->parent()->name(), 'Directory parent does not match.');
 		
 		// Attempt to retrieve file from listing
-		$this->assertInstanceOf('Storage_File', $listing->get($segment_2)->get($file), 'Expecting new file to exist within listing.');		
+		$this->assertInstanceOf('Storage_File', $listing->get($segment_2)->get($file), 'Expecting new file to exist within listing.');
 		
 		// Cleanup test file
 		$this->assertEquals(TRUE, $connection->delete($path . $file), 'Verify file has been deleted.');	
@@ -274,28 +274,28 @@ abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase
 					$handle = fopen($file, 'r');
 					
 					$stat = fstat($handle);
-			
+					
 					$path = $this->_get_path();
 
 					$storage->set($path, $handle);
 
 					// Compare remote file sizes
-					$this->assertEquals($stat['size'], $storage->size($path));					
+					$this->assertEquals($stat['size'], $storage->size($path));
 					
 					// Temp path
 					$local = tempnam(sys_get_temp_dir(), 'test');
-			
+					
 					// Verify get success
 					$this->assertEquals(TRUE, $storage->get($path, $local));
 
 					// Compare local file sizes
-					$this->assertEquals($stat['size'], filesize($local));					
+					$this->assertEquals($stat['size'], filesize($local));
 					
 					// Delete local file
 					unset($local);
 					
 					// Cleanup test file
-					$storage->delete($path);			
+					$storage->delete($path);
 				}
 			}
 		}

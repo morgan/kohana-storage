@@ -10,7 +10,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_AtmosTest extends Kohana_Storage_ConnectionTest
-{	
+{
 	/**
 	 * Verify internet and Atmos has required configuration
 	 * 
@@ -18,25 +18,26 @@ class Kohana_Storage_Connection_AtmosTest extends Kohana_Storage_ConnectionTest
 	 * @return	void
 	 */
 	public function setUp()
-    {
-    	parent::setUp();
+	{
+		parent::setUp();
 
-    	$config = Kohana::$config->load('storage.atmos');
-    	
-        if ( ! $this->hasInternet() || ! $config['host'] || ! $config['uid'] || ! $config['subtenant_id'] || ! $config['secret'])
-        {
-            $this->markTestSkipped('Storage Atmos driver is not configured.');
-        }
-    }
-    
-    /**
-     * Factory using Atmos configuration
-     * 
-     * @access	public
-     * @return	Storage_Atmos
-     */
-    public function factory()
-    {
-    	return Storage_Connection::factory('atmos');
-    }
+		$config = Kohana::$config->load('storage.atmos');
+		
+		if ( ! $this->hasInternet() OR ! $config['host'] OR ! $config['uid'] 
+			OR ! $config['subtenant_id'] OR ! $config['secret'])
+		{
+		    $this->markTestSkipped('Storage Atmos driver is not configured.');
+		}
+	}
+
+	/**
+	 * Factory using Atmos configuration
+	 * 
+	 * @access	public
+	 * @return	Storage_Atmos
+	 */
+	public function factory()
+	{
+		return Storage_Connection::factory('atmos');
+	}
 }

@@ -9,7 +9,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_S3 extends Storage_Connection
-{	
+{
 	/**
 	 * Default config
 	 * 
@@ -25,7 +25,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 		'secret'				=> NULL,
 		'bucket'				=> NULL,
 		'cname'					=> NULL,
-		'public'				=> FALSE,		
+		'public'				=> FALSE, 
 		'preauth'				=> 30,
 		'path_style'			=> FALSE,
 		'certificate_authority'	=> FALSE
@@ -57,7 +57,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 	{
 		if ($this->_driver === NULL)
 		{
-			require_once Kohana::find_file('vendor', 'aws-sdk/sdk.class');				
+			require_once Kohana::find_file('vendor', 'aws-sdk/sdk.class');
 
 			$this->_driver = new AmazonS3(Arr::extract($this->_config, 
 				array('key', 'secret', 'certificate_authority')));
@@ -119,7 +119,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 		$this->_driver->delete_object($this->_config['bucket'], $path);
 		
 		return TRUE;
-	}	
+	}
 	
 	/**
 	 * Size
@@ -133,7 +133,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 		$this->_load();
 		
 		return $this->_driver->get_object_filesize($this->_config['bucket'], $path, FALSE);
-	}	
+	}
 	
 	/**
 	 * Whether or not file exists
@@ -168,7 +168,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 		}
 		else
 			return $protocol . '://' . $this->_get_url() . $path;
-	}	
+	}
 	
 	/**
 	 * Get listing
@@ -198,7 +198,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 			$object = Storage_Directory::factory($name, $this);
 			
 			$listing->set($object);
-		}		
+		}
 		
 		foreach ($response->body->Contents as $file)
 		{
@@ -207,7 +207,7 @@ class Kohana_Storage_Connection_S3 extends Storage_Connection
 			$object = Storage_File::factory($name, $this)
 				->size((int) $file->Size)
 				->modified(strtotime($file->LastModified));
-			
+		
 			$listing->set($object);
 		}
 		
