@@ -15,7 +15,7 @@ class Kohana_Storage
 	 * 
 	 * @var		string
 	 */
-	const DELIMITER = '/';	
+	const DELIMITER = '/';
 
 	/**
 	 * Namespace helper for `Storage_Connection` factory pattern.
@@ -64,7 +64,7 @@ class Kohana_Storage
 		{
 			$segments[] = $path['dirname'];
 		}
-	
+		
 		$segments[] = substr($hash, 0, 2);
 		$segments[] = substr($hash, 2, 2);
 		$segments[]	= $hash . ((isset($path['extension'])) ? '.' . $path['extension'] : '');
@@ -87,7 +87,7 @@ class Kohana_Storage
 		
 		if ($mime = File::mime_by_ext($extension))
 			return $mime;
-				
+		
 		return $default;
 	}
 }

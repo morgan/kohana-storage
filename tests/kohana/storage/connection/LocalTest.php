@@ -10,7 +10,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_LocalTest extends Kohana_Storage_ConnectionTest
-{	
+{
 	/**
 	 * Verify internet and local has required configuration
 	 * 
@@ -18,25 +18,25 @@ class Kohana_Storage_Connection_LocalTest extends Kohana_Storage_ConnectionTest
 	 * @return	void
 	 */
 	public function setUp()
-    {
-    	parent::setUp();
+	{
+		parent::setUp();
 
-    	$config = Kohana::$config->load('storage.local');
-    	
-        if ( ! $config['root_path'] || ! $config['url'])
-        {
-            $this->markTestSkipped('Storage Local driver is not configured.');
-        }
-    }
-    
-    /**
-     * Factory using Local configuration
-     * 
-     * @access	public
-     * @return	Storage_Local
-     */
-    public function factory()
-    {
-    	return Storage_Connection::factory('local');
-    }
+		$config = Kohana::$config->load('storage.local');
+		
+		if ( ! $config['root_path'] OR ! $config['url'])
+		{
+		    $this->markTestSkipped('Storage Local driver is not configured.');
+		}
+	}
+
+	/**
+	 * Factory using Local configuration
+	 * 
+	 * @access	public
+	 * @return	Storage_Local
+	 */
+	public function factory()
+	{
+		return Storage_Connection::factory('local');
+	}
 }

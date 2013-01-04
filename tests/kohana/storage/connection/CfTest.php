@@ -10,7 +10,7 @@
  * @license		MIT
  */
 class Kohana_Storage_Connection_CfTest extends Kohana_Storage_ConnectionTest
-{	
+{
 	/**
 	 * Verify internet and Cloud Files has required configuration
 	 * 
@@ -18,25 +18,25 @@ class Kohana_Storage_Connection_CfTest extends Kohana_Storage_ConnectionTest
 	 * @return	void
 	 */
 	public function setUp()
-    {
-    	parent::setUp();
+	{
+		parent::setUp();
 
-    	$config = Kohana::$config->load('storage.cf');
-    	
-        if ( ! $this->hasInternet() || ! $config['username'] || ! $config['api_key'])
-        {
-            $this->markTestSkipped('Storage Cloud Files driver is not configured.');
-        }
-    }
-    
-    /**
-     * Factory using Cloud Files configuration
-     * 
-     * @access	public
-     * @return	Storage_Cf
-     */
-    public function factory()
-    {
-    	return Storage_Connection::factory('cf', array('public' => TRUE));
-    }
+		$config = Kohana::$config->load('storage.cf');
+		
+		if ( ! $this->hasInternet() || ! $config['username'] || ! $config['api_key'])
+		{
+			$this->markTestSkipped('Storage Cloud Files driver is not configured.');
+		}
+	}
+
+	/**
+	 * Factory using Cloud Files configuration
+	 * 
+	 * @access	public
+	 * @return	Storage_Cf
+	 */
+	public function factory()
+	{
+		return Storage_Connection::factory('cf', array('public' => TRUE));
+	}
 }
