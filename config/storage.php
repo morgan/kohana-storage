@@ -17,6 +17,8 @@
 	 * @link	https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
 	 */
 
+	define('AWS_DISABLE_CONFIG_AUTO_DISCOVERY', TRUE);
+
 	// REQUIRED - AWS Keys - Under access credentials in AWS Portal
 	$config['s3']['key'] 					= NULL;
 	$config['s3']['secret'] 				= NULL;
