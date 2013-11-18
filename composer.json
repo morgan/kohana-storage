@@ -1,0 +1,34 @@
+{
+	"name": "morgan/kohana-storage",
+	"type":  "kohana-module",
+	"description": "Storage Module",
+	"license": "MIT",
+	"keywords": ["kohana", "framework", "storage"],
+	"authors": [
+		{
+			"name": "Mícheál Morgan",
+			"email": "micheal@morgan.ly",
+			"role": "developer"
+		},
+		{
+			"name": "Alessandro Frangioni",
+			"email": "alessandro.frangioni@gmail.com",
+			"role": "developer"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0",
+		"kohana/core": ">=3.0",
+		"php": ">=5.3.3"
+	},
+	"suggest": {
+		"amazonwebservices/aws-sdk-for-php": "AWS SDK for PHP - Version 1",
+		"morgan/php-cloudfiles": "PHP language bindings for Cloud Files API http://www.rackspacecloud.com"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/alle/kohana-storage"
+		}
+	]
+}
