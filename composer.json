@@ -1,5 +1,5 @@
 {
-	"name": "morgan/kohana-storage",
+	"name": "alle/kohana-storage",
 	"type":  "kohana-module",
 	"description": "Storage Module",
 	"license": "MIT",
