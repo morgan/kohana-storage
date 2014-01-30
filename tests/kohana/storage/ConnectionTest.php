@@ -6,7 +6,7 @@
  * @package		Storage
  * @category	Tests
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011-2012 Micheal Morgan
+ * @copyright	(c) 2011-2014 Micheal Morgan
  * @license		MIT
  */
 abstract class Kohana_Storage_ConnectionTest extends Unittest_TestCase

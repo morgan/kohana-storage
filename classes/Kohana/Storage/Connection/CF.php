@@ -10,7 +10,7 @@
  * @package		Storage
  * @category	Base
  * @author		Micheal Morgan <micheal@morgan.ly>
- * @copyright	(c) 2011-2012 Micheal Morgan
+ * @copyright	(c) 2011-2014 Micheal Morgan
  * @license		MIT
  */
 class Kohana_Storage_Connection_Cf extends Storage_Connection
