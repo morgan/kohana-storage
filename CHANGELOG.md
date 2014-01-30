@@ -1,3 +1,11 @@
+# 0.7.0
+
+- Removed AWS SDK v1 `amazonwebservices/aws-sdk-for-php.git` submodule
+- Removed Rackspace Cloud Files `morgan/php-cloudfiles.git` submodule
+- Added AWS SDK v2 composer dependency
+- Added OpenCloud/Rackspace SDK composer dependency
+- Updated `.gitignore` to ignore itemized composer dependencies until EMC-Atmos is available as a package (which then can ignore entire vendor directory). Due to the poor structure of the EMC-Atmos SDK, it requires direct edits which is currently under versioning of this repo.
+
 # 0.6.0 - 01/04/2013
 
 - Upgraded to support Kohana 3.3

@@ -18,6 +18,6 @@ Recommend starting out with Storage documentation locally using the User Guide m
 - API Browser
 - Unit Tests
 
-## Version 0.6.0
+## Version 0.7.0
 
-This is release version 0.6.0 of [Storage](https://github.com/morgan/kohana-storage).
+This is release version 0.7.0 of [Storage](https://github.com/morgan/kohana-storage).
