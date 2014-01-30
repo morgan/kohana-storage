@@ -1,6 +1,42 @@
 {
+	"name": "morgan/kohana-storage",
+	"homepage": "https://github.com/morgan/kohana-storage/",
+	"description": "A key/value storage abstraction supporting Amazon S3, Rackspace Cloud Files, EMC Atmos, FTP and the local file system.",
+	"keywords": ["kohana", "amazon", "s3", "cloudfiles", "atmos", "ftp"],
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mícheál Morgan",
+			"email": "micheal@morgan.ly",
+			"homepage": "https://github.com/morgan",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/morgan/kohana-storage/issues"
+	},
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "emc/atmos",
+				"version": "2.1.1",
+				"dist": {
+					"url": "http://atmos-php.googlecode.com/files/EsuPHP_2.1.1.zip",
+					"type": "zip"
+				},
+				"source": {
+					"type": "svn",
+					"url": "http://atmos-php.googlecode.com/svn/",
+					"reference": "trunk"
+				}
+			}
+		}
+	],
 	"require": {
 		"aws/aws-sdk-php": "2.*",
-		"rackspace/php-opencloud": "dev-working"
+		"rackspace/php-opencloud": "dev-working",
+		"emc/atmos": "2.*"
 	}
 }
