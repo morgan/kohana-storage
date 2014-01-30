@@ -1,2 +1,9 @@
+composer.lock
 .project
 .DS_Store
+vendor/aws
+vendor/composer
+vendor/guzzle
+vendor/rackspace
+vendor/symfony
+vendor/autoload.php

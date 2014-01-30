@@ -1,0 +1,6 @@
+{
+	"require": {
+		"aws/aws-sdk-php": "2.*",
+		"rackspace/php-opencloud": "dev-working"
+	}
+}
