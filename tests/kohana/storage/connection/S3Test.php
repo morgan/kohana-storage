@@ -7,7 +7,7 @@
  * @category	Tests
  * @author		Micheal Morgan <micheal@morgan.ly>
  * @copyright	(c) 2011-2014 Micheal Morgan
- * @license		MITw
+ * @license		MIT
  */
 class Kohana_Storage_Connection_S3Test extends Kohana_Storage_ConnectionTest
 {

@@ -1,6 +1,6 @@
 # Storage Module
 
-Storage abstraction supporting:
+Storage abstraction for creating, updating, deleting and browsing files (plus more) supporting:
 
 - Amazon S3
 - Rackspace Cloud Files
