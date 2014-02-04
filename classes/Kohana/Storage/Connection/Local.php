@@ -73,9 +73,14 @@ class Kohana_Storage_Connection_Local extends Storage_Connection
 	 */
 	protected function _delete($path)
 	{
-		return unlink($this->_config['root_path'] . $path);
+		$path = $this->_config['root_path'] . $path;
+
+		if (is_dir($path))
+			return rmdir($path);
+		else
+			return unlink($path);
 	}
-	
+
 	/**
 	 * Size
 	 * 
