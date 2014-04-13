@@ -21,3 +21,5 @@ Recommend starting out with Storage documentation locally using the User Guide m
 ## Version 0.6.0
 
 This is release version 0.6.0 of [Storage](https://github.com/morgan/kohana-storage).
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alle/kohana-storage/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
